@@ -1,7 +1,11 @@
 @import url(https://fonts.googleapis.com/css?family=Nunito);
 
+html, body {
+    background-color: #fafafa;
+}
+
 .main-panel {
-    background-color: #ffffff !important;
+    background-color: #fafafa !important;
 }
 
 .sidebar .nav p, .off-canvas-sidebar .nav p {
@@ -11,4 +15,13 @@
 
 .sidebar .nav i, .off-canvas-sidebar .nav i {
     color: rgba(255, 255, 255, .75);
+}
+
+.dropdown-toggle::after {
+    display: none;
+}
+
+.grid-charts p {
+    margin-top: 20px;
+    color: #000;
 }
