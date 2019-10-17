@@ -20,8 +20,8 @@ class CreateHistoricosTable extends Migration
             $table->foreign('sensor_id')->references('id')->on('sensores');
 
             $table->double('dados');
-            $table->date('data');
-            $table->time('hora');//hora
+            // $table->date('data');
+            $table->datetime('data_hora');//hora
             $table->boolean('status');//true e false
         });
     }

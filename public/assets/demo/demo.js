@@ -104,7 +104,7 @@ demo = {
     });
   },
 
-  initDashboardPageCharts: function() {
+  initDashboardPageCharts: function(response) {
 
     chartColor = "#FFFFFF";
 
@@ -219,10 +219,17 @@ demo = {
     gradientFill.addColorStop(0, "rgba(128, 182, 244, 0)");
     gradientFill.addColorStop(1, "rgba(255, 255, 255, 0.24)");
 
+    var urlPath =  'http://' + window.location.hostname + ':8000' + '/chartMain';
+    var request = $.ajax({
+                    method: 'GET',
+                    url: urlPath
+                  })
+
     var myChart = new Chart(ctx, {
       type: 'line',
       data: {
-        labels: ["JAN", "FEB", "MAR", "APR", "MAY", "JUN", "JUL", "AUG", "SEP", "OCT", "NOV", "DEC"],
+        // labels: ["JAN", "FEB", "MAR", "APR", "MAY", "JUN", "JUL", "AUG", "SEP", "OCT", "NOV", "DEC"],
+        labels: response,
         datasets: [{
           label: "Data",
           borderColor: chartColor,
