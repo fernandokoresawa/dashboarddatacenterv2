@@ -16,7 +16,7 @@
             </div>
         </div>
 
-        <div class="col">
+        {{-- <div class="col">
             <div class="card mb-3" style="background-color: rgba(255,0,0,.5)">
                 <div class="card-header">
                     <h3>Temperaturas Ruins</h3>
@@ -26,10 +26,10 @@
                     <canvas id="chartTempRuim" width="100%" height="30"></canvas>
                 </div>
             </div>
-        </div>
+        </div> --}}
     </div>
 
-    <div class="row mt-2 grid-charts">
+    {{-- <div class="row mt-2 grid-charts">
         <div class="col">
             <div class="card mb-3" style="background-color: rgba(0,255,0,.5)">
                 <h3 class="card-header">Umidade</h3>
@@ -77,7 +77,7 @@
                 </div>
             </div>
         </div>
-    </div>
+    </div> --}}
 </div>
 
 @endsection

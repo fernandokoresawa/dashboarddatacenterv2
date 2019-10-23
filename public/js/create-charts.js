@@ -86,7 +86,7 @@
 				responsive: true,
 				data: {
 					// labels: ["Jan", "Fev", "Mar", "Abr", "Mai", "Jun", "Jul", "Ago", "Set", "Out", "Nov", "Dez"],
-					labels: response.tempBoas.meses,
+					labels: response.tempBoas.dias,
 					datasets: [{
 						label: "Temp",
 						lineTension: 0.3,
@@ -110,9 +110,6 @@
 							},
 							gridLines: {
 								display: false
-							},
-							ticks: {
-								maxTicksLimit: 7
 							}
 						}],
 						yAxes: [{

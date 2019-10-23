@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use DB;
 use Illuminate\Http\Request;
 use Carbon\Carbon;
 
@@ -37,7 +38,7 @@ class HomeController extends Controller
         $meses_array = array();
         $temperatura_datas = Historico::where([['sensor_id', 3],['status', 1]])->orderBy('data_hora', 'ASC')->pluck('data_hora');
         $temperatura_datas = json_decode($temperatura_datas);
-        
+
         if (!empty($temperatura_datas)) {
 			foreach ($temperatura_datas as $data_sem_formato) {
 				$date = new \DateTime($data_sem_formato);
@@ -51,7 +52,7 @@ class HomeController extends Controller
         $meses_ruim_array = array();
         $temperatura_ruim_datas = Historico::where([['sensor_id', 3],['status', 0]])->orderBy('data_hora', 'ASC')->pluck('data_hora');
         $temperatura_ruim_datas = json_decode($temperatura_ruim_datas);
-        
+
         if (!empty($temperatura_ruim_datas)) {
 			foreach ($temperatura_ruim_datas as $data_sem_formato) {
 				$date = new \DateTime($data_sem_formato);
@@ -65,16 +66,59 @@ class HomeController extends Controller
     }
 
     /**
+     * VERIFICA EM QUAIS DIAS DE DETERMINADO MÊS HOUVE OCORRÊNCIAS
+     */
+    public function getAllDias()
+    {
+        $dias_array = array();
+        $temperatura_datas = Historico::where([['sensor_id', 3],['status', 1]])->orderBy('data_hora', 'ASC')->pluck('data_hora');
+        $temperatura_datas = json_decode($temperatura_datas);
+
+        if (!empty($temperatura_datas)) {
+			foreach ($temperatura_datas as $data_sem_formato) {
+				$date = new \DateTime($data_sem_formato);
+				$dia_numero = $date->format('d');
+				//$mes_nome = $date->format('M');
+				$dias_array[$dia_numero] = $dia_numero;
+			}
+        }
+
+        return $dias_array;
+    }
+
+    /**
+     * PEGAR TEMPERATURAS
+     */
+    function getTemperaturas()
+    {
+        // $temperaturas_boas = Historico::where([['sensor_id', 3], ['status', 1], ['data_hora', 'like', '%2019-04-%']])->get();
+        $temperaturas_boas = DB::table('historicos')->select('dados')->where([['sensor_id', 3], ['status', 1], ['data_hora', 'like', '%2019-10-%']])->distinct()->get();
+        return $temperaturas_boas;
+    }
+
+    /**
      * VERIFICA QUANTAS OCORRÊNCIAS HOUVE POR MÊS
      */
     function getOcorrenciasTempMensal($mes)
 	{
         $mensal_temp_count = Historico::where([['sensor_id', 3], ['status', 1]])->whereMonth('data_hora', $mes)->get()->count();
         $mensal_temp_ruim_count = Historico::where([['sensor_id', 3], ['status', 0]])->whereMonth('data_hora', $mes)->get()->count();
-		
+
         return [$mensal_temp_count, $mensal_temp_ruim_count];
     }
-    
+
+    /**
+     * VERIFICA QUANTAS OCORRÊNCIAS HOUVE POR DIA
+     */
+    function getOcorrenciasTempDiario($dia)
+	{
+        $diario_temp_count = Historico::where([['sensor_id', 3], ['status', 1]])->whereDay('data_hora', $dia)->get()->count();
+        // $mensal_temp_ruim_count = Historico::where([['sensor_id', 3], ['status', 0]])->whereDay('data_hora', $mes)->get()->count();
+
+        // return [$diario_temp_count, $mensal_temp_ruim_count];
+        return $diario_temp_count;
+    }
+
     function getDadosMensaisTemp()
 	{
         /**
@@ -98,7 +142,7 @@ class HomeController extends Controller
 			'temp_dados' => $mensal_temp_count_array,
 			'max' => $max
         );
-        
+
 
         /**
          * MONTA ARRAY COM DADOS DAS TEMPERATURAS RUINS
@@ -123,6 +167,33 @@ class HomeController extends Controller
 		);
 
 		return ["tempBoas"=>$mensal_temp_dados_array, "tempRuins"=>$mensal_temp_ruim_dados_array];
+    }
+
+    function getDadosDiarioTemp()
+	{
+        /**
+         * MONTA ARRAY COM DADOS DAS TEMPERATURAS BOAS
+         */
+		$diario_temp_count_array = array();
+		$dias_array = $this->getAllDias();
+		$dia_array_numero = array();
+		if (!empty($dias_array)) {
+			foreach ($dias_array as $dia_numero) {
+				$diario_temp_count = $this->getOcorrenciasTempDiario($dia_numero);
+				array_push($diario_temp_count_array, $diario_temp_count);
+				array_push($dia_array_numero, $dia_numero);
+			}
+		}
+
+		$numero_max = max($diario_temp_count_array);
+		$max = round(($numero_max + 100) / 10) * 10;
+		$diario_temp_dados_array = array(
+			'dias' => $dia_array_numero,
+			'temp_dados' => $diario_temp_count_array,
+			'max' => $max
+        );
+
+		return ["tempBoas"=>$diario_temp_dados_array];
     }
 
 }
