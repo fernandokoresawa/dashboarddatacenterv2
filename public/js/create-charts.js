@@ -82,11 +82,11 @@
 			 */
 			var ctx = document.getElementById("chartTempBoas")
 			var myLineChart = new Chart(ctx, {
-				type: 'line',
+				type: 'bar',
 				responsive: true,
 				data: {
 					// labels: ["Jan", "Fev", "Mar", "Abr", "Mai", "Jun", "Jul", "Ago", "Set", "Out", "Nov", "Dez"],
-					labels: response.tempBoas.dias,
+					labels: response.tempRuins.meses,
 					datasets: [{
 						label: "Temp",
 						lineTension: 0.3,
@@ -99,7 +99,7 @@
 						pointHoverBackgroundColor: "rgba(2,117,216,1)",
 						pointHitRadius: 20,
 						pointBorderWidth: 2,
-						data: response.tempBoas.temp_dados
+						data: response.tempRuins.temp_dados
 					}],
 				},
 				options: {

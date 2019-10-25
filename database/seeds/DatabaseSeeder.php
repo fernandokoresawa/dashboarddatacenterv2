@@ -14,5 +14,6 @@ class DatabaseSeeder extends Seeder
         $this->call(UserSeeder::class);
         $this->call(SensorSeeder::class);
         $this->call(HistoricoSeeder::class);
+        $this->call(ShutdownSeeder::class);
     }
 }

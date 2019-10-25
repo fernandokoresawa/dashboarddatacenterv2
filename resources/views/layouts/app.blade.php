@@ -33,9 +33,6 @@
         <div class="sidebar" data-color="blue">
 
             <div class="logo text-center">
-                <!-- <a href="http://www.creative-tim.com" class="simple-text logo-mini">
-                    DATACENTER
-                </a> -->
                 <a href="{{ route('home') }}" class="simple-text logo-normal">
                     DATACENTER
                 </a>
@@ -48,40 +45,25 @@
                             <p>Dashboard</p>
                         </a>
                     </li>
+
                     <li class="nav-link">
-                        <a href="./icons.html">
-                            <i class="now-ui-icons education_atom"></i>
-                            <p>Icons</p>
+                        <a href="{{ route('shutdown') }}"
+                            onclick="event.preventDefault();document.getElementById('shut-form').submit();">
+                            <i class="now-ui-icons design_app"></i>
+                            <p>Shutdown</p>
                         </a>
                     </li>
+
+                    <form id="shut-form" action="{{ route('shutdown') }}" method="POST" style="display: none;">
+                        @csrf
+                        <input type="hidden" name="_method" value="put">
+                        <input type="hidden" name="shutdown" value="{{ $shut }}">
+                    </form>
+
                     <li class="nav-link">
-                        <a href="./map.html">
+                        <a href="{{ route('tabela') }}">
                             <i class="now-ui-icons location_map-big"></i>
-                            <p>Maps</p>
-                        </a>
-                    </li>
-                    <li class="nav-link">
-                        <a href="./notifications.html">
-                            <i class="now-ui-icons ui-1_bell-53"></i>
-                            <p>Notifications</p>
-                        </a>
-                    </li>
-                    <li class="nav-link">
-                        <a href="./user.html">
-                            <i class="now-ui-icons users_single-02"></i>
-                            <p>User Profile</p>
-                        </a>
-                    </li>
-                    <li class="nav-link">
-                        <a href="./tables.html">
-                            <i class="now-ui-icons design_bullet-list-67"></i>
-                            <p>Table List</p>
-                        </a>
-                    </li>
-                    <li class="nav-link">
-                        <a href="./typography.html">
-                            <i class="now-ui-icons text_caps-small"></i>
-                            <p>Typography</p>
+                            <p>Tabelas</p>
                         </a>
                     </li>
 
@@ -89,7 +71,7 @@
                         <a class="nav-link dropdown-toggle" id="navbarDropdownMenuLink" data-toggle="dropdown"
                             aria-haspopup="true" aria-expanded="false">
                             <i class="now-ui-icons users_single-02"></i>
-                            <p>{{ Auth::user()->name }}</p>
+                            <p>Sair</p>
                         </a>
 
                         <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdownMenuLink">
@@ -137,7 +119,7 @@
     {{-- <script src="{{ asset('js/app.js') }}"></script> --}}
 
     <script>
-    $('.dropdown-toggle').dropdown()
+        $('.dropdown-toggle').dropdown()
 
     $(".nav .nav-link").on("click", function(){
         $(".nav").find(".active").removeClass("active")

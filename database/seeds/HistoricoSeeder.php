@@ -12,7 +12,7 @@ class HistoricoSeeder extends Seeder
      */
     public function run()
     {
-        for ($i = 1; $i <= 3000; $i++) {
+        for ($i = 1; $i <= 100; $i++) {
             DB::table('historicos')->insert([
                 'sensor_id'     => 1,
                 'dados'         => Rand(0, 4),

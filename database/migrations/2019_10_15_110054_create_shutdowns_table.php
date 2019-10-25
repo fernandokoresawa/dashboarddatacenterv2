@@ -14,9 +14,9 @@ class CreateShutdownsTable extends Migration
     public function up()
     {
         Schema::create('shutdowns', function (Blueprint $table) {
-            $table->boolean('rele_1');
-            $table->boolean('rele_2');
-            $table->boolean('rele_3');
+            $table->bigIncrements('id');
+            $table->boolean('rele');
+            $table->timestamps();
         });
     }
 

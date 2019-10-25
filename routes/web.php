@@ -19,6 +19,12 @@ Auth::routes();
 
 Route::get('/home', 'HomeController@index')->name('home');
 
-Route::get('/chartmain', 'HomeController@getDadosDiarioTemp')->name('chartmain');
+Route::get('/chartmain', 'HomeController@getDadosMensaisTemp')->name('chartmain');
 
 Route::resource('/historico', 'HistoricoController');
+
+Route::get('/getshutdown', 'ShutdownController@index')->name('getshutdown');
+
+Route::put('shutdown', 'ShutdownController@shutdown')->name('shutdown');
+
+Route::get('tabela', 'HistoricoController@index')->name('tabela');
