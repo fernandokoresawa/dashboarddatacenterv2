@@ -2,7 +2,11 @@
 
 namespace App\Http\Controllers;
 
+use Illuminate\Support\Facades\Mail;
 use Illuminate\Http\Request;
+
+use App\Alerta;
+use App\Shutdown;
 
 class AlertaController extends Controller
 {
@@ -13,7 +17,35 @@ class AlertaController extends Controller
      */
     public function index()
     {
-        //
+        $alertas = Alerta::all();
+
+        // SHUTDOWN
+        $shutdown = $shutdown = Shutdown::find(1);
+        $shut = $shutdown->rele;
+
+        return view('alerta', compact('shut', 'alertas'));
+    }
+
+    public function enviarAlerta()
+    {
+        $email = '  yasminuchoa123@gmail.com';
+
+        $emailform = 'email@email.com';
+
+        $subject = 'assunto';
+
+        //send('template do email', 'acesso a view do template', 'função com as configs do email' 
+        Mail::send('layouts.email.email', function($m) use ($email, $subject){
+            $m->from('paroquiaicm@paroquiaicm.com.br', 'Contato via Site')
+              ->replyTo('email@email.com')
+              ->to($email)
+              ->subject('assunto');
+        });
+
+        // \Session::flash('mensagem', ['msg'=>'Mensagem enviada com sucesso! Em breve retornaremos o contato!', 'class'=>'green white-text']);
+
+        // return redirect()->route('index', '#contato');
+        return 'ok';
     }
 
     /**

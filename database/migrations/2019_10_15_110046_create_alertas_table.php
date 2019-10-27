@@ -16,7 +16,14 @@ class CreateAlertasTable extends Migration
         Schema::create('alertas', function (Blueprint $table) {
             $table->bigIncrements('id');
 
-            $table->string('sms');
+            $table->unsignedBigInteger('historico_id');
+            $table->foreign('historico_id')->references('id')->on('historicos');
+
+            $table->string('mensagem');
+
+            //Ex.: Sensor de gás em estado de alerta: 81ppm em 23/10/2019 às 14:00:23 
+
+            $table->timestamps();
         });
     }
 

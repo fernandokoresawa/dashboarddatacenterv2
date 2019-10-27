@@ -10,4 +10,9 @@ class Historico extends Model
     {
         return $this->belongsTo('App\Sensor', 'sensor_id');
     }
+
+    public function alerta()
+    {
+        return $this->belongsTo('App\Alerta', 'historico_id');
+    }
 }

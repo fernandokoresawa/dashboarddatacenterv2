@@ -67,6 +67,13 @@
                         </a>
                     </li>
 
+                    <li class="nav-link">
+                            <a href="{{ route('alerta') }}">
+                                <i class="now-ui-icons location_map-big"></i>
+                                <p>Alertas</p>
+                            </a>
+                        </li>
+
                     <li class="nav-link dropdown">
                         <a class="nav-link dropdown-toggle" id="navbarDropdownMenuLink" data-toggle="dropdown"
                             aria-haspopup="true" aria-expanded="false">
