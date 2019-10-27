@@ -21,6 +21,8 @@ class CreateAlertasTable extends Migration
 
             $table->string('mensagem');
 
+            $table->boolean('enviado');
+
             //Ex.: Sensor de gás em estado de alerta: 81ppm em 23/10/2019 às 14:00:23 
 
             $table->timestamps();

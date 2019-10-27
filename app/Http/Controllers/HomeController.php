@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use Mail;
 use DB;
 use Illuminate\Http\Request;
 use Carbon\Carbon;
@@ -54,10 +55,27 @@ class HomeController extends Controller
         $getLastFluxo = Historico::where('sensor_id', '=', 8)->orderby('id', 'desc')->first();
 
         // SHUTDOWN
-        $shutdown = $shutdown = Shutdown::find(1);
+        $shutdown = Shutdown::find(1);
         $shut = $shutdown->rele;
 
         return view('home', compact('shut', 'getLastCorrente', 'getLastTensao', 'getLastTemp', 'getLastUmidade', 'getLastGas', 'getLastPot', 'getLastVazao', 'getLastFluxo'));
+    }
+
+    public function getAlerta()
+    {
+        $lastTemp = Historico::where([['status', 1],['sensor_id', 3]])->orderby('data_hora','desc')->first();
+
+        //send('template do email', 'acesso a view do template', 'função com as configs do email' 
+        Mail::send('layouts.email.email', ['lastTemp'=>$lastTemp], function($m) use ($lastTemp) {
+            $m->from('yasminuchoa123@gmail.com', 'Datacenter Realtime');
+            $m->to('yasminuchoa123@gmail.com');
+            $m->subject('Alerta Datacenter - Sistema em estado crítico!');
+        });
+
+        // \Session::flash('mensagem', ['msg'=>'Mensagem enviada com sucesso! Em breve retornaremos o contato!', 'class'=>'green white-text']);
+
+        return redirect()->back('index', '#contato');
+        // return 'ok';
     }
 
 

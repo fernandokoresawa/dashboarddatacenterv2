@@ -26,20 +26,13 @@ class AlertaController extends Controller
         return view('alerta', compact('shut', 'alertas'));
     }
 
-    public function enviarAlerta()
+    public function enviarAlerta(Request $request)
     {
-        $email = '  yasminuchoa123@gmail.com';
-
-        $emailform = 'email@email.com';
-
-        $subject = 'assunto';
-
         //send('template do email', 'acesso a view do template', 'função com as configs do email' 
-        Mail::send('layouts.email.email', function($m) use ($email, $subject){
-            $m->from('paroquiaicm@paroquiaicm.com.br', 'Contato via Site')
-              ->replyTo('email@email.com')
-              ->to($email)
-              ->subject('assunto');
+        Mail::send('layouts.email.email', ['Datacenter'=>'alerta'], function($m) {
+            $m->from('yasminuchoa123@gmail.com', 'Datacenter Realtime');
+            $m->to('yasminuchoa123@gmail.com');
+            $m->subject('Alerta - sistema em estado crítico');
         });
 
         // \Session::flash('mensagem', ['msg'=>'Mensagem enviada com sucesso! Em breve retornaremos o contato!', 'class'=>'green white-text']);

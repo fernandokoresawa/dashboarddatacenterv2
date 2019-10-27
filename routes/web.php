@@ -21,6 +21,8 @@ Route::get('/home', 'HomeController@index')->name('home');
 
 Route::get('/chartmain', 'HomeController@getAllDadosAllSensores')->name('chartmain');
 
+Route::get('getalerta', 'HomeController@getAlerta')->name('getalerta');
+
 Route::resource('/historico', 'HistoricoController');
 
 Route::get('/getshutdown', 'ShutdownController@index')->name('getshutdown');

@@ -1,6 +1,19 @@
-<h2 align="center">Contato pelo Site</h2>
-<p><b>Nome:</b> {{ $request['nome'] }}</p>
-<p><b>Email:</b> {{ $request['email'] }}</p>
-<p><b>Telefone:</b> {{ $request['telefone'] }}</p>
-<p><b>Assunto:</b> {{ $request['assunto'] }}</p>
-<p><b>Mensagem:</b> {{ $request['mensagem'] }}</p>
+<h2 align="center">Alerta! Falha identificada no sistema! Verifique os sensores.</h2>
+
+<p>Nome de usuário: Yasmin Uchôa</p>
+
+
+<p>
+	<b>Sensor: </b>
+	{{ $lastTemp->sensor->nome_sensor }}
+</p>
+
+<p>
+	<b>Dado: </b>
+	{{ $lastTemp['dados'] }}
+</p>
+
+<p>
+	<b>Data e hora: </b>
+	{{ $lastTemp['data_hora'] }}
+</p>
