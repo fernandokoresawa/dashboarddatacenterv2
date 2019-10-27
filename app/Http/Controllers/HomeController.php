@@ -10,6 +10,7 @@ use Carbon\Carbon;
 use App\Historico;
 use App\Shutdown;
 use App\Sensor;
+use App\Alerta;
 
 class HomeController extends Controller
 {
@@ -64,6 +65,18 @@ class HomeController extends Controller
     public function getAlerta()
     {
         $lastTemp = Historico::where([['status', 1],['sensor_id', 3]])->orderby('data_hora','desc')->first();
+
+        $lastAlertTemp = new Alerta([
+            'historico_id' => $lastTemp->id,
+            'mensagem'     => 'Alerta! Falha identificada no sistema! Verifique os sensores.',
+            'enviado'      => true,
+            // 'created_at'   => Carbon::now(),
+            // 'updated_at'   => Carbon::now()
+        ]);
+        $lastAlertTemp->save();
+        // $historico_id = $lastTemp->id;
+
+
 
         //send('template do email', 'acesso a view do template', 'função com as configs do email' 
         Mail::send('layouts.email.email', ['lastTemp'=>$lastTemp], function($m) use ($lastTemp) {

@@ -31,4 +31,4 @@ Route::put('shutdown', 'ShutdownController@shutdown')->name('shutdown');
 
 Route::get('tabela', 'HistoricoController@index')->name('tabela');
 
-Route::get('alerta', 'AlertaController@enviarAlerta')->name('alerta');
+Route::get('alerta', 'AlertaController@index')->name('alerta');

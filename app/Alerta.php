@@ -8,11 +8,12 @@ class Alerta extends Model
 {
     protected $fillable = [
         'historico_id',
-        'mensagem'
+        'mensagem',
+        'enviado'
     ];
 
     public function historico()
     {
-        return $this->hasOne('App\Historico', 'historico_id');
+        return $this->belongsTo('App\Historico', 'historico_id');
     }
 }

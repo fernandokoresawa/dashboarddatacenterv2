@@ -12,6 +12,7 @@
         @foreach ($alertas as $alerta)
         
         <div class="alert alert-primary p-4">
+            <b>{{ $alerta->historico->sensor->nome_sensor }}</b><br>
             <span>
                 {{ $alerta->mensagem }}
             </span>
