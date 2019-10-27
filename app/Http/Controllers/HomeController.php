@@ -44,13 +44,22 @@ class HomeController extends Controller
         // PEGAR ÚLTIMO RESGITRO DO SENSOR DE GÁS - 5
         $getLastGas = Historico::where('sensor_id', '=', 5)->orderby('id', 'desc')->first();
 
+        // PEGAR ÚLTIMO RESGITRO DO SENSOR DE POTÊNCIA - 6
+        $getLastPot = Historico::where('sensor_id', '=', 6)->orderby('id', 'desc')->first();
+
+        // PEGAR ÚLTIMO RESGITRO DO SENSOR DE VAZÃO - 7
+        $getLastVazao = Historico::where('sensor_id', '=', 7)->orderby('id', 'desc')->first();
+
+        // PEGAR ÚLTIMO RESGITRO DO SENSOR DE FLUXO - 8
+        $getLastFluxo = Historico::where('sensor_id', '=', 8)->orderby('id', 'desc')->first();
 
         // SHUTDOWN
         $shutdown = $shutdown = Shutdown::find(1);
         $shut = $shutdown->rele;
 
-        return view('home', compact('shut', 'getLastCorrente', 'getLastTensao', 'getLastTemp', 'getLastUmidade', 'getLastGas'));
+        return view('home', compact('shut', 'getLastCorrente', 'getLastTensao', 'getLastTemp', 'getLastUmidade', 'getLastGas', 'getLastPot', 'getLastVazao', 'getLastFluxo'));
     }
+
 
     /**
      * VERIFICA EM QUAIS MESES HOUVE OCORRÊNCIAS
@@ -70,53 +79,135 @@ class HomeController extends Controller
             }
         }
 
+        return $meses_array;
+    }
 
-        $meses_ruim_array = array();
-        $temperatura_ruim_datas = Historico::where([['sensor_id', 3], ['status', 0]])->orderBy('data_hora', 'ASC')->pluck('data_hora');
-        $temperatura_ruim_datas = json_decode($temperatura_ruim_datas);
+    public function getAllMesesCorrente()
+    {
+        $meses_array = array();
+        $datas = Historico::where([['sensor_id', 1], ['status', 1]])->orderBy('data_hora', 'ASC')->pluck('data_hora');
+        $datas = json_decode($datas);
 
-        if (!empty($temperatura_ruim_datas)) {
-            foreach ($temperatura_ruim_datas as $data_sem_formato) {
+        if (!empty($datas)) {
+            foreach ($datas as $data_sem_formato) {
                 $date = new \DateTime($data_sem_formato);
                 $mes_numero = $date->format('m');
                 $mes_nome = $date->format('M');
-                $meses_ruim_array[$mes_numero] = $mes_nome;
+                $meses_array[$mes_numero] = $mes_nome;
             }
         }
 
-        return [$meses_array, $meses_ruim_array];
+        return $meses_array;
     }
 
-    /**
-     * VERIFICA EM QUAIS DIAS DE DETERMINADO MÊS HOUVE OCORRÊNCIAS
-     */
-    public function getAllDias()
+    public function getAllMesesTensao()
     {
-        $dias_array = array();
-        $temperatura_datas = Historico::where([['sensor_id', 3], ['status', 1]])->orderBy('data_hora', 'ASC')->pluck('data_hora');
-        $temperatura_datas = json_decode($temperatura_datas);
+        $meses_array = array();
+        $datas = Historico::where([['sensor_id', 2], ['status', 1]])->orderBy('data_hora', 'ASC')->pluck('data_hora');
+        $datas = json_decode($datas);
 
-        if (!empty($temperatura_datas)) {
-            foreach ($temperatura_datas as $data_sem_formato) {
+        if (!empty($datas)) {
+            foreach ($datas as $data_sem_formato) {
                 $date = new \DateTime($data_sem_formato);
-                $dia_numero = $date->format('d');
-                //$mes_nome = $date->format('M');
-                $dias_array[$dia_numero] = $dia_numero;
+                $mes_numero = $date->format('m');
+                $mes_nome = $date->format('M');
+                $meses_array[$mes_numero] = $mes_nome;
             }
         }
 
-        return $dias_array;
+        return $meses_array;
     }
 
-    /**
-     * PEGAR TEMPERATURAS
-     */
-    function getTemperaturas()
+    public function getAllMesesUmidade()
     {
-        // $temperaturas_boas = Historico::where([['sensor_id', 3], ['status', 1], ['data_hora', 'like', '%2019-04-%']])->get();
-        $temperaturas_boas = DB::table('historicos')->select('dados')->where([['sensor_id', 3], ['status', 1], ['data_hora', 'like', '%2019-10-%']])->distinct()->get();
-        return $temperaturas_boas;
+        $meses_array = array();
+        $datas = Historico::where([['sensor_id', 4], ['status', 1]])->orderBy('data_hora', 'ASC')->pluck('data_hora');
+        $datas = json_decode($datas);
+
+        if (!empty($datas)) {
+            foreach ($datas as $data_sem_formato) {
+                $date = new \DateTime($data_sem_formato);
+                $mes_numero = $date->format('m');
+                $mes_nome = $date->format('M');
+                $meses_array[$mes_numero] = $mes_nome;
+            }
+        }
+
+        return $meses_array;
     }
+
+    public function getAllMesesGas()
+    {
+        $meses_array = array();
+        $datas = Historico::where([['sensor_id', 5], ['status', 1]])->orderBy('data_hora', 'ASC')->pluck('data_hora');
+        $datas = json_decode($datas);
+
+        if (!empty($datas)) {
+            foreach ($datas as $data_sem_formato) {
+                $date = new \DateTime($data_sem_formato);
+                $mes_numero = $date->format('m');
+                $mes_nome = $date->format('M');
+                $meses_array[$mes_numero] = $mes_nome;
+            }
+        }
+
+        return $meses_array;
+    }
+
+    public function getAllMesesPotencia()
+    {
+        $meses_array = array();
+        $datas = Historico::where([['sensor_id', 6], ['status', 1]])->orderBy('data_hora', 'ASC')->pluck('data_hora');
+        $datas = json_decode($datas);
+
+        if (!empty($datas)) {
+            foreach ($datas as $data_sem_formato) {
+                $date = new \DateTime($data_sem_formato);
+                $mes_numero = $date->format('m');
+                $mes_nome = $date->format('M');
+                $meses_array[$mes_numero] = $mes_nome;
+            }
+        }
+
+        return $meses_array;
+    }
+
+    public function getAllMesesVazao()
+    {
+        $meses_array = array();
+        $datas = Historico::where([['sensor_id', 7], ['status', 1]])->orderBy('data_hora', 'ASC')->pluck('data_hora');
+        $datas = json_decode($datas);
+
+        if (!empty($datas)) {
+            foreach ($datas as $data_sem_formato) {
+                $date = new \DateTime($data_sem_formato);
+                $mes_numero = $date->format('m');
+                $mes_nome = $date->format('M');
+                $meses_array[$mes_numero] = $mes_nome;
+            }
+        }
+
+        return $meses_array;
+    }
+
+    public function getAllMesesFluxo()
+    {
+        $meses_array = array();
+        $datas = Historico::where([['sensor_id', 8], ['status', 1]])->orderBy('data_hora', 'ASC')->pluck('data_hora');
+        $datas = json_decode($datas);
+
+        if (!empty($datas)) {
+            foreach ($datas as $data_sem_formato) {
+                $date = new \DateTime($data_sem_formato);
+                $mes_numero = $date->format('m');
+                $mes_nome = $date->format('M');
+                $meses_array[$mes_numero] = $mes_nome;
+            }
+        }
+
+        return $meses_array;
+    }
+
 
     /**
      * VERIFICA QUANTAS OCORRÊNCIAS HOUVE POR MÊS
@@ -124,97 +215,303 @@ class HomeController extends Controller
     function getOcorrenciasTempMensal($mes)
     {
         $mensal_temp_count = Historico::where([['sensor_id', 3], ['status', 1]])->whereMonth('data_hora', $mes)->get()->count();
-        $mensal_temp_ruim_count = Historico::where([['sensor_id', 3], ['status', 0]])->whereMonth('data_hora', $mes)->get()->count();
 
-        return [$mensal_temp_count, $mensal_temp_ruim_count];
+        return $mensal_temp_count;
     }
+
+    function getOcorrenciasCorrenteMensal($mes)
+    {
+        $mensal_dado_count = Historico::where([['sensor_id', 1], ['status', 1]])->whereMonth('data_hora', $mes)->get()->count();
+
+        return $mensal_dado_count;
+    }
+
+    function getOcorrenciasTensaoMensal($mes)
+    {
+        $mensal_dado_count = Historico::where([['sensor_id', 2], ['status', 1]])->whereMonth('data_hora', $mes)->get()->count();
+
+        return $mensal_dado_count;
+    }
+
+    function getOcorrenciasUmidadeMensal($mes)
+    {
+        $mensal_dado_count = Historico::where([['sensor_id', 4], ['status', 1]])->whereMonth('data_hora', $mes)->get()->count();
+
+        return $mensal_dado_count;
+    }
+
+    function getOcorrenciasGasMensal($mes)
+    {
+        $mensal_dado_count = Historico::where([['sensor_id', 5], ['status', 1]])->whereMonth('data_hora', $mes)->get()->count();
+
+        return $mensal_dado_count;
+    }
+
+    function getOcorrenciasPotenciaMensal($mes)
+    {
+        $mensal_dado_count = Historico::where([['sensor_id', 6], ['status', 1]])->whereMonth('data_hora', $mes)->get()->count();
+
+        return $mensal_dado_count;
+    }
+
+    function getOcorrenciasVazaoMensal($mes)
+    {
+        $mensal_dado_count = Historico::where([['sensor_id', 7], ['status', 1]])->whereMonth('data_hora', $mes)->get()->count();
+
+        return $mensal_dado_count;
+    }
+
+    function getOcorrenciasFluxoMensal($mes)
+    {
+        $mensal_dado_count = Historico::where([['sensor_id', 8], ['status', 1]])->whereMonth('data_hora', $mes)->get()->count();
+
+        return $mensal_dado_count;
+    }
+
 
     /**
-     * VERIFICA QUANTAS OCORRÊNCIAS HOUVE POR DIA
+     * PEGA OS DADOS POR MÊS
      */
-    function getOcorrenciasTempDiario($dia)
-    {
-        $diario_temp_count = Historico::where([['sensor_id', 3], ['status', 1]])->whereDay('data_hora', $dia)->get()->count();
-        // $mensal_temp_ruim_count = Historico::where([['sensor_id', 3], ['status', 0]])->whereDay('data_hora', $mes)->get()->count();
-
-        // return [$diario_temp_count, $mensal_temp_ruim_count];
-        return $diario_temp_count;
-    }
-
     function getDadosMensaisTemp()
     {
         /**
-         * MONTA ARRAY COM DADOS DAS TEMPERATURAS BOAS
+         * MONTA ARRAY COM DADOS DAS TEMPERATURAS RUINS
          */
         $mensal_temp_count_array = array();
-        $meses_array = $this->getAllMeses()[0];
+        $meses_array = $this->getAllMeses();
         $mes_array_name = array();
         if (!empty($meses_array)) {
             foreach ($meses_array as $mes_numero => $mes_name) {
-                $mensal_temp_count = $this->getOcorrenciasTempMensal($mes_numero)[0];
+                $mensal_temp_count = $this->getOcorrenciasTempMensal($mes_numero);
                 array_push($mensal_temp_count_array, $mensal_temp_count);
                 array_push($mes_array_name, $mes_name);
             }
         }
 
         $numero_max = max($mensal_temp_count_array);
-        $max = round(($numero_max + 100) / 10) * 10;
+        $max = round(($numero_max + 100) / 10) * 2;
         $mensal_temp_dados_array = array(
             'meses' => $mes_array_name,
-            'temp_dados' => $mensal_temp_count_array,
+            'dados' => $mensal_temp_count_array,
             'max' => $max
         );
 
-
-        /**
-         * MONTA ARRAY COM DADOS DAS TEMPERATURAS RUINS
-         */
-        $mensal_temp_ruim_count_array = array();
-        $meses_ruim_array = $this->getAllMeses()[1];
-        $mes_ruim_array_name = array();
-        if (!empty($meses_ruim_array)) {
-            foreach ($meses_ruim_array as $mes_numero_ruim => $mes_name_ruim) {
-                $mensal_temp_ruim_count = $this->getOcorrenciasTempMensal($mes_numero_ruim)[1];
-                array_push($mensal_temp_ruim_count_array, $mensal_temp_ruim_count);
-                array_push($mes_ruim_array_name, $mes_name_ruim);
-            }
-        }
-
-        $numero_max_ruim = max($mensal_temp_ruim_count_array);
-        $max_ruim = round(($numero_max_ruim + 100) / 10) * 10;
-        $mensal_temp_ruim_dados_array = array(
-            'meses' => $mes_ruim_array_name,
-            'temp_dados' => $mensal_temp_ruim_count_array,
-            'max' => $max_ruim
-        );
-
-        return ["tempBoas" => $mensal_temp_dados_array, "tempRuins" => $mensal_temp_ruim_dados_array];
+        return $mensal_temp_dados_array;
     }
 
-    function getDadosDiarioTemp()
+    function getDadosMensaisCorrente()
     {
         /**
-         * MONTA ARRAY COM DADOS DAS TEMPERATURAS BOAS
+         * MONTA ARRAY COM DADOS DAS CORRENTES RUINS
          */
-        $diario_temp_count_array = array();
-        $dias_array = $this->getAllDias();
-        $dia_array_numero = array();
-        if (!empty($dias_array)) {
-            foreach ($dias_array as $dia_numero) {
-                $diario_temp_count = $this->getOcorrenciasTempDiario($dia_numero);
-                array_push($diario_temp_count_array, $diario_temp_count);
-                array_push($dia_array_numero, $dia_numero);
+        $mensal_dado_count_array = array();
+        $meses_array = $this->getAllMesesCorrente();
+        $mes_array_name = array();
+        if (!empty($meses_array)) {
+            foreach ($meses_array as $mes_numero => $mes_name) {
+                $mensal_sensor_count = $this->getOcorrenciasCorrenteMensal($mes_numero);
+                array_push($mensal_dado_count_array, $mensal_sensor_count);
+                array_push($mes_array_name, $mes_name);
             }
         }
 
-        $numero_max = max($diario_temp_count_array);
+        $numero_max = max($mensal_dado_count_array);
         $max = round(($numero_max + 100) / 10) * 10;
-        $diario_temp_dados_array = array(
-            'dias' => $dia_array_numero,
-            'temp_dados' => $diario_temp_count_array,
+        $dados_array = array(
+            'meses' => $mes_array_name,
+            'dados' => $mensal_dado_count_array,
             'max' => $max
         );
 
-        return ["tempBoas" => $diario_temp_dados_array];
+        return $dados_array;
+    }
+
+    function getDadosMensaisTensao()
+    {
+        /**
+         * MONTA ARRAY COM DADOS DAS TENSÕES RUINS
+         */
+        $mensal_dado_count_array = array();
+        $meses_array = $this->getAllMesesTensao();
+        $mes_array_name = array();
+        if (!empty($meses_array)) {
+            foreach ($meses_array as $mes_numero => $mes_name) {
+                $mensal_sensor_count = $this->getOcorrenciasTensaoMensal($mes_numero);
+                array_push($mensal_dado_count_array, $mensal_sensor_count);
+                array_push($mes_array_name, $mes_name);
+            }
+        }
+
+        $numero_max = max($mensal_dado_count_array);
+        $max = round(($numero_max + 100) / 10) * 10;
+        $dados_array = array(
+            'meses' => $mes_array_name,
+            'dados' => $mensal_dado_count_array,
+            'max' => $max
+        );
+
+        return $dados_array;
+    }
+
+    function getDadosMensaisUmidade()
+    {
+        /**
+         * MONTA ARRAY COM DADOS DAS TENSÕES RUINS
+         */
+        $mensal_dado_count_array = array();
+        $meses_array = $this->getAllMesesUmidade();
+        $mes_array_name = array();
+        if (!empty($meses_array)) {
+            foreach ($meses_array as $mes_numero => $mes_name) {
+                $mensal_sensor_count = $this->getOcorrenciasUmidadeMensal($mes_numero);
+                array_push($mensal_dado_count_array, $mensal_sensor_count);
+                array_push($mes_array_name, $mes_name);
+            }
+        }
+
+        $numero_max = max($mensal_dado_count_array);
+        $max = round(($numero_max + 100) / 10) * 10;
+        $dados_array = array(
+            'meses' => $mes_array_name,
+            'dados' => $mensal_dado_count_array,
+            'max' => $max
+        );
+
+        return $dados_array;
+    }
+
+    function getDadosMensaisGas()
+    {
+        /**
+         * MONTA ARRAY COM DADOS DAS TENSÕES RUINS
+         */
+        $mensal_dado_count_array = array();
+        $meses_array = $this->getAllMesesGas();
+        $mes_array_name = array();
+        if (!empty($meses_array)) {
+            foreach ($meses_array as $mes_numero => $mes_name) {
+                $mensal_sensor_count = $this->getOcorrenciasGasMensal($mes_numero);
+                array_push($mensal_dado_count_array, $mensal_sensor_count);
+                array_push($mes_array_name, $mes_name);
+            }
+        }
+
+        $numero_max = max($mensal_dado_count_array);
+        $max = round(($numero_max + 100) / 10) * 10;
+        $dados_array = array(
+            'meses' => $mes_array_name,
+            'dados' => $mensal_dado_count_array,
+            'max' => $max
+        );
+
+        return $dados_array;
+    }
+
+    function getDadosMensaisPotencia()
+    {
+        /**
+         * MONTA ARRAY COM DADOS DAS TENSÕES RUINS
+         */
+        $mensal_dado_count_array = array();
+        $meses_array = $this->getAllMesesPotencia();
+        $mes_array_name = array();
+        if (!empty($meses_array)) {
+            foreach ($meses_array as $mes_numero => $mes_name) {
+                $mensal_sensor_count = $this->getOcorrenciasPotenciaMensal($mes_numero);
+                array_push($mensal_dado_count_array, $mensal_sensor_count);
+                array_push($mes_array_name, $mes_name);
+            }
+        }
+
+        $numero_max = max($mensal_dado_count_array);
+        $max = round(($numero_max + 100) / 10) * 10;
+        $dados_array = array(
+            'meses' => $mes_array_name,
+            'dados' => $mensal_dado_count_array,
+            'max' => $max
+        );
+
+        return $dados_array;
+    }
+
+    function getDadosMensaisVazao()
+    {
+        /**
+         * MONTA ARRAY COM DADOS DAS TENSÕES RUINS
+         */
+        $mensal_dado_count_array = array();
+        $meses_array = $this->getAllMesesVazao();
+        $mes_array_name = array();
+        if (!empty($meses_array)) {
+            foreach ($meses_array as $mes_numero => $mes_name) {
+                $mensal_sensor_count = $this->getOcorrenciasVazaoMensal($mes_numero);
+                array_push($mensal_dado_count_array, $mensal_sensor_count);
+                array_push($mes_array_name, $mes_name);
+            }
+        }
+
+        $numero_max = max($mensal_dado_count_array);
+        $max = round(($numero_max + 100) / 10) * 10;
+        $dados_array = array(
+            'meses' => $mes_array_name,
+            'dados' => $mensal_dado_count_array,
+            'max' => $max
+        );
+
+        return $dados_array;
+    }
+
+    function getDadosMensaisFluxo()
+    {
+        /**
+         * MONTA ARRAY COM DADOS DAS TENSÕES RUINS
+         */
+        $mensal_dado_count_array = array();
+        $meses_array = $this->getAllMesesFluxo();
+        $mes_array_name = array();
+        if (!empty($meses_array)) {
+            foreach ($meses_array as $mes_numero => $mes_name) {
+                $mensal_sensor_count = $this->getOcorrenciasFluxoMensal($mes_numero);
+                array_push($mensal_dado_count_array, $mensal_sensor_count);
+                array_push($mes_array_name, $mes_name);
+            }
+        }
+
+        $numero_max = max($mensal_dado_count_array);
+        $max = round(($numero_max + 100) / 10) * 10;
+        $dados_array = array(
+            'meses' => $mes_array_name,
+            'dados' => $mensal_dado_count_array,
+            'max' => $max
+        );
+
+        return $dados_array;
+    }
+
+
+    /**
+     * PEGAR FUNÇÃO POR FUNÇÃO, JOGAR EM VARIÁVEIS PARA GERAR OS GRÁFICOS
+     */
+    public function getAllDadosAllSensores()
+    {
+        $temperaturas = $this->getDadosMensaisTemp();
+        $correntes = $this->getDadosMensaisCorrente();
+        $tensoes = $this->getDadosMensaisTensao();
+        $umidade = $this->getDadosMensaisUmidade();
+        $gas = $this->getDadosMensaisGas();
+        $potencia = $this->getDadosMensaisPotencia();
+        $vazao = $this->getDadosMensaisVazao();
+        $fluxo = $this->getDadosMensaisFluxo();
+
+        return [
+            "temperaturas"  => $temperaturas,
+            "correntes"     => $correntes,
+            "tensoes"       => $tensoes,
+            "umidade"       => $umidade,
+            "gas"           => $gas,
+            "potencia"      => $potencia,
+            "vazao"         => $vazao,
+            "fluxo"         => $fluxo,
+        ];
     }
 }

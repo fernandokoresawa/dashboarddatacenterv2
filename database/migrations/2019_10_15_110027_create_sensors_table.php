@@ -19,6 +19,8 @@ class CreateSensorsTable extends Migration
             $table->string('nome_sensor');
             $table->double('informacao');
 
+            $table->timestamps();
+
         });
     }
 

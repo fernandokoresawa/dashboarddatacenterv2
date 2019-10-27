@@ -5,16 +5,20 @@
 			Chart.defaults.global.defaultFontFamily = '-apple-system,system-ui,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif'
 			Chart.defaults.global.defaultFontColor = '#010101'
 
-			this.ajaxGetDadosMensaisTemp()
-			this.ajaxGetDadosMensaisTempRuim()
-			this.ajaxGetDadosMensaisTempBar()
-			this.ajaxGetDadosMensaisTempBarRuim()
+			this.ajaxGetDadosTemp()
+			this.ajaxGetDadosTensao()
+			this.ajaxGetDadosCorrente()
+			this.ajaxGetDadosFluxo()
+			this.ajaxGetDadosGas()
+			this.ajaxGetDadosUmidade()
+			this.ajaxGetDadosPotencia()
+			this.ajaxGetDadosVazao()
 		},
 
 		/**
-		 * PEGA DADOS TEMPERATURAS BOAS
+		 * PEGA DADOS
 		 */
-		ajaxGetDadosMensaisTemp: function () {
+		ajaxGetDadosTemp: function () {
 			var urlPath = 'http://' + window.location.hostname + ':8000' + '/chartmain'
 			var request = $.ajax({
 				method: 'GET',
@@ -22,15 +26,12 @@
 			})
 
 			request.done(function (response) {
-				console.log(response)
-				charts.createCompletedJobsChart(response)
+				// console.log(response)
+				charts.createCompletedJobsChartTemp(response)
 			})
 		},
 
-		/**
-		 * PEGA DADOS TEMPERATURAS RUINS
-		 */
-		ajaxGetDadosMensaisTempRuim: function () {
+		ajaxGetDadosCorrente: function () {
 			var urlPath = 'http://' + window.location.hostname + ':8000' + '/chartmain'
 			var request = $.ajax({
 				method: 'GET',
@@ -38,15 +39,12 @@
 			})
 
 			request.done(function (response) {
-				console.log(response)
-				charts.createCompletedJobsChartRuim(response)
+				// console.log(response)
+				charts.createCompletedJobsChartCorrente(response)
 			})
 		},
 
-		/**
-		 * PEGA DADOS TEMPERATURAS RUINS
-		 */
-		ajaxGetDadosMensaisTempBar: function () {
+		ajaxGetDadosUmidade: function () {
 			var urlPath = 'http://' + window.location.hostname + ':8000' + '/chartmain'
 			var request = $.ajax({
 				method: 'GET',
@@ -54,12 +52,12 @@
 			})
 
 			request.done(function (response) {
-				console.log(response)
-				charts.createCompletedJobsChartBar(response)
+				// console.log(response)
+				charts.createCompletedJobsChartUmidade(response)
 			})
 		},
 
-		ajaxGetDadosMensaisTempBarRuim: function () {
+		ajaxGetDadosVazao: function () {
 			var urlPath = 'http://' + window.location.hostname + ':8000' + '/chartmain'
 			var request = $.ajax({
 				method: 'GET',
@@ -67,28 +65,78 @@
 			})
 
 			request.done(function (response) {
-				console.log(response)
-				charts.createCompletedJobsChartBarRuim(response)
+				// console.log(response)
+				charts.createCompletedJobsChartVazao(response)
 			})
 		},
+
+		ajaxGetDadosTensao: function () {
+			var urlPath = 'http://' + window.location.hostname + ':8000' + '/chartmain'
+			var request = $.ajax({
+				method: 'GET',
+				url: urlPath
+			})
+
+			request.done(function (response) {
+				// console.log(response)
+				charts.createCompletedJobsChartTensao(response)
+			})
+		},
+
+		ajaxGetDadosPotencia: function () {
+			var urlPath = 'http://' + window.location.hostname + ':8000' + '/chartmain'
+			var request = $.ajax({
+				method: 'GET',
+				url: urlPath
+			})
+
+			request.done(function (response) {
+				// console.log(response)
+				charts.createCompletedJobsChartPotencia(response)
+			})
+		},
+
+		ajaxGetDadosGas: function () {
+			var urlPath = 'http://' + window.location.hostname + ':8000' + '/chartmain'
+			var request = $.ajax({
+				method: 'GET',
+				url: urlPath
+			})
+
+			request.done(function (response) {
+				// console.log(response)
+				charts.createCompletedJobsChartGas(response)
+			})
+		},
+
+		ajaxGetDadosFluxo: function () {
+			var urlPath = 'http://' + window.location.hostname + ':8000' + '/chartmain'
+			var request = $.ajax({
+				method: 'GET',
+				url: urlPath
+			})
+
+			request.done(function (response) {
+				// console.log(response)
+				charts.createCompletedJobsChartFluxo(response)
+			})
+		},
+
 
 		/**
 		 * Created the Completed Jobs Chart
 		 */
-		createCompletedJobsChart: function (response) {
+		createCompletedJobsChartTemp: function (response) {
 
-			/**
-			 * MONTA GRÁFICO TEMPERATURAS BOAS
-			 */
-			var ctx = document.getElementById("chartTempBoas")
+			var ctx = document.getElementById("chartTemp")
 			var myLineChart = new Chart(ctx, {
 				type: 'bar',
 				responsive: true,
 				data: {
 					// labels: ["Jan", "Fev", "Mar", "Abr", "Mai", "Jun", "Jul", "Ago", "Set", "Out", "Nov", "Dez"],
-					labels: response.tempRuins.meses,
+					labels: response.temperaturas.meses,
 					datasets: [{
-						label: "Temp",
+						label: "Qtd",
 						lineTension: 0.3,
 						backgroundColor: "rgba(2,117,216,0.2)",
 						borderColor: "rgba(2,117,216,1)",
@@ -99,7 +147,7 @@
 						pointHoverBackgroundColor: "rgba(2,117,216,1)",
 						pointHitRadius: 20,
 						pointBorderWidth: 2,
-						data: response.tempRuins.temp_dados
+						data: response.temperaturas.dados
 					}],
 				},
 				options: {
@@ -115,8 +163,8 @@
 						yAxes: [{
 							ticks: {
 								min: 0,
-								// max: response.max,
-								maxTicksLimit: 5
+								// max: response.temperaturas.max,
+								// maxTicksLimit: 5
 							},
 							gridLines: {
 								color: "rgba(0,0,0,0,125)",
@@ -130,19 +178,20 @@
 			})
 		},
 
-		createCompletedJobsChartRuim: function (response) {
+		createCompletedJobsChartCorrente: function (response) {
 
 			/**
-			 * MONTA GRÁFICO TEMPERATURAS RUINS
+			 * MONTA GRÁFICO correntes
 			 */
-			var ctx = document.getElementById("chartTempRuim")
+			var ctx = document.getElementById("chartCorrente")
 			var myLineChart = new Chart(ctx, {
-				type: 'line',
+				type: 'bar',
+				responsive: true,
 				data: {
 					// labels: ["Jan", "Fev", "Mar", "Abr", "Mai", "Jun", "Jul", "Ago", "Set", "Out", "Nov", "Dez"],
-					labels: response.tempRuins.meses,
+					labels: response.correntes.meses,
 					datasets: [{
-						label: "Temp",
+						label: "Qtd",
 						lineTension: 0.3,
 						backgroundColor: "rgba(2,117,216,0.2)",
 						borderColor: "rgba(2,117,216,1)",
@@ -153,7 +202,7 @@
 						pointHoverBackgroundColor: "rgba(2,117,216,1)",
 						pointHitRadius: 20,
 						pointBorderWidth: 2,
-						data: response.tempRuins.temp_dados
+						data: response.correntes.dados
 					}],
 				},
 				options: {
@@ -164,19 +213,16 @@
 							},
 							gridLines: {
 								display: false
-							},
-							ticks: {
-								maxTicksLimit: 7
 							}
 						}],
 						yAxes: [{
 							ticks: {
 								min: 0,
-								// max: response.max,
-								maxTicksLimit: 5
+								// max: response.correntes.max,
+								// maxTicksLimit: 5
 							},
 							gridLines: {
-								color: "rgba(255, 255, 255,0.5)",
+								color: "rgba(0,0,0,0,125)",
 							}
 						}],
 					},
@@ -187,19 +233,17 @@
 			})
 		},
 
-		createCompletedJobsChartBar: function (response) {
+		createCompletedJobsChartTensao: function (response) {
 
-			/**
-			 * MONTA GRÁFICO TEMPERATURAS RUINS
-			 */
-			var ctx = document.getElementById("chartTempBar")
+			var ctx = document.getElementById("chartTensao")
 			var myLineChart = new Chart(ctx, {
 				type: 'bar',
+				responsive: true,
 				data: {
 					// labels: ["Jan", "Fev", "Mar", "Abr", "Mai", "Jun", "Jul", "Ago", "Set", "Out", "Nov", "Dez"],
-					labels: response.tempRuins.meses,
+					labels: response.tensoes.meses,
 					datasets: [{
-						label: "Temp",
+						label: "Qtd",
 						lineTension: 0.3,
 						backgroundColor: "rgba(2,117,216,0.2)",
 						borderColor: "rgba(2,117,216,1)",
@@ -210,7 +254,7 @@
 						pointHoverBackgroundColor: "rgba(2,117,216,1)",
 						pointHitRadius: 20,
 						pointBorderWidth: 2,
-						data: response.tempRuins.temp_dados
+						data: response.tensoes.dados
 					}],
 				},
 				options: {
@@ -221,19 +265,16 @@
 							},
 							gridLines: {
 								display: false
-							},
-							ticks: {
-								maxTicksLimit: 7
 							}
 						}],
 						yAxes: [{
 							ticks: {
 								min: 0,
-								// max: response.max,
-								maxTicksLimit: 5
+								// max: response.tensoes.max,
+								// maxTicksLimit: 5
 							},
 							gridLines: {
-								color: "rgba(255, 255, 255,0.5)",
+								color: "rgba(0,0,0,0,125)",
 							}
 						}],
 					},
@@ -242,21 +283,19 @@
 					}
 				}
 			})
-		}, 
+		},
 
-		createCompletedJobsChartBarRuim: function (response) {
+		createCompletedJobsChartGas: function (response) {
 
-			/**
-			 * MONTA GRÁFICO TEMPERATURAS RUINS
-			 */
-			var ctx = document.getElementById("chartTempBarRuim")
+			var ctx = document.getElementById("chartGas")
 			var myLineChart = new Chart(ctx, {
 				type: 'bar',
+				responsive: true,
 				data: {
 					// labels: ["Jan", "Fev", "Mar", "Abr", "Mai", "Jun", "Jul", "Ago", "Set", "Out", "Nov", "Dez"],
-					labels: response.tempRuins.meses,
+					labels: response.gas.meses,
 					datasets: [{
-						label: "Temp",
+						label: "Qtd",
 						lineTension: 0.3,
 						backgroundColor: "rgba(2,117,216,0.2)",
 						borderColor: "rgba(2,117,216,1)",
@@ -267,7 +306,7 @@
 						pointHoverBackgroundColor: "rgba(2,117,216,1)",
 						pointHitRadius: 20,
 						pointBorderWidth: 2,
-						data: response.tempRuins.temp_dados
+						data: response.gas.dados
 					}],
 				},
 				options: {
@@ -278,19 +317,16 @@
 							},
 							gridLines: {
 								display: false
-							},
-							ticks: {
-								maxTicksLimit: 7
 							}
 						}],
 						yAxes: [{
 							ticks: {
 								min: 0,
-								// max: response.max,
-								maxTicksLimit: 5
+								// max: response.gas.max,
+								// maxTicksLimit: 5
 							},
 							gridLines: {
-								color: "rgba(255, 255, 255,0.5)",
+								color: "rgba(0,0,0,0,125)",
 							}
 						}],
 					},
@@ -299,7 +335,216 @@
 					}
 				}
 			})
-		}
+		},
+
+		createCompletedJobsChartUmidade: function (response) {
+
+			var ctx = document.getElementById("chartUmidade")
+			var myLineChart = new Chart(ctx, {
+				type: 'bar',
+				responsive: true,
+				data: {
+					// labels: ["Jan", "Fev", "Mar", "Abr", "Mai", "Jun", "Jul", "Ago", "Set", "Out", "Nov", "Dez"],
+					labels: response.umidade.meses,
+					datasets: [{
+						label: "Qtd",
+						lineTension: 0.3,
+						backgroundColor: "rgba(2,117,216,0.2)",
+						borderColor: "rgba(2,117,216,1)",
+						pointRadius: 5,
+						pointBackgroundColor: "rgba(2,117,216,1)",
+						pointBorderColor: "rgba(255,255,255,0.8)",
+						pointHoverRadius: 5,
+						pointHoverBackgroundColor: "rgba(2,117,216,1)",
+						pointHitRadius: 20,
+						pointBorderWidth: 2,
+						data: response.umidade.dados
+					}],
+				},
+				options: {
+					scales: {
+						xAxes: [{
+							time: {
+								unit: 'date'
+							},
+							gridLines: {
+								display: false
+							}
+						}],
+						yAxes: [{
+							ticks: {
+								min: 0,
+								// max: response.umidade.max,
+								// maxTicksLimit: 5
+							},
+							gridLines: {
+								color: "rgba(0,0,0,0,125)",
+							}
+						}],
+					},
+					legend: {
+						display: false
+					}
+				}
+			})
+		},
+
+		createCompletedJobsChartPotencia: function (response) {
+
+			var ctx = document.getElementById("chartPotencia")
+			var myLineChart = new Chart(ctx, {
+				type: 'bar',
+				responsive: true,
+				data: {
+					// labels: ["Jan", "Fev", "Mar", "Abr", "Mai", "Jun", "Jul", "Ago", "Set", "Out", "Nov", "Dez"],
+					labels: response.potencia.meses,
+					datasets: [{
+						label: "Qtd",
+						lineTension: 0.3,
+						backgroundColor: "rgba(2,117,216,0.2)",
+						borderColor: "rgba(2,117,216,1)",
+						pointRadius: 5,
+						pointBackgroundColor: "rgba(2,117,216,1)",
+						pointBorderColor: "rgba(255,255,255,0.8)",
+						pointHoverRadius: 5,
+						pointHoverBackgroundColor: "rgba(2,117,216,1)",
+						pointHitRadius: 20,
+						pointBorderWidth: 2,
+						data: response.potencia.dados
+					}],
+				},
+				options: {
+					scales: {
+						xAxes: [{
+							time: {
+								unit: 'date'
+							},
+							gridLines: {
+								display: false
+							}
+						}],
+						yAxes: [{
+							ticks: {
+								min: 0,
+								// max: response.potencias.max,
+								// maxTicksLimit: 5
+							},
+							gridLines: {
+								color: "rgba(0,0,0,0,125)",
+							}
+						}],
+					},
+					legend: {
+						display: false
+					}
+				}
+			})
+		},
+
+		createCompletedJobsChartVazao: function (response) {
+
+			var ctx = document.getElementById("chartVazao")
+			var myLineChart = new Chart(ctx, {
+				type: 'bar',
+				responsive: true,
+				data: {
+					// labels: ["Jan", "Fev", "Mar", "Abr", "Mai", "Jun", "Jul", "Ago", "Set", "Out", "Nov", "Dez"],
+					labels: response.vazao.meses,
+					datasets: [{
+						label: "Qtd",
+						lineTension: 0.3,
+						backgroundColor: "rgba(2,117,216,0.2)",
+						borderColor: "rgba(2,117,216,1)",
+						pointRadius: 5,
+						pointBackgroundColor: "rgba(2,117,216,1)",
+						pointBorderColor: "rgba(255,255,255,0.8)",
+						pointHoverRadius: 5,
+						pointHoverBackgroundColor: "rgba(2,117,216,1)",
+						pointHitRadius: 20,
+						pointBorderWidth: 2,
+						data: response.vazao.dados
+					}],
+				},
+				options: {
+					scales: {
+						xAxes: [{
+							time: {
+								unit: 'date'
+							},
+							gridLines: {
+								display: false
+							}
+						}],
+						yAxes: [{
+							ticks: {
+								min: 0,
+								// max: response.vazao.max,
+								// maxTicksLimit: 5
+							},
+							gridLines: {
+								color: "rgba(0,0,0,0,125)",
+							}
+						}],
+					},
+					legend: {
+						display: false
+					}
+				}
+			})
+		},
+
+		createCompletedJobsChartFluxo: function (response) {
+
+			var ctx = document.getElementById("chartFluxo")
+			var myLineChart = new Chart(ctx, {
+				type: 'bar',
+				responsive: true,
+				data: {
+					// labels: ["Jan", "Fev", "Mar", "Abr", "Mai", "Jun", "Jul", "Ago", "Set", "Out", "Nov", "Dez"],
+					labels: response.fluxo.meses,
+					datasets: [{
+						label: "Qtd",
+						lineTension: 0.3,
+						backgroundColor: "rgba(2,117,216,0.2)",
+						borderColor: "rgba(2,117,216,1)",
+						pointRadius: 5,
+						pointBackgroundColor: "rgba(2,117,216,1)",
+						pointBorderColor: "rgba(255,255,255,0.8)",
+						pointHoverRadius: 5,
+						pointHoverBackgroundColor: "rgba(2,117,216,1)",
+						pointHitRadius: 20,
+						pointBorderWidth: 2,
+						data: response.fluxo.dados
+					}],
+				},
+				options: {
+					scales: {
+						xAxes: [{
+							time: {
+								unit: 'date'
+							},
+							gridLines: {
+								display: false
+							}
+						}],
+						yAxes: [{
+							ticks: {
+								min: 0,
+								// max: response.fluxo.max,
+								// maxTicksLimit: 5
+							},
+							gridLines: {
+								color: "rgba(0,0,0,0,125)",
+							}
+						}],
+					},
+					legend: {
+						display: false
+					}
+				}
+			})
+		},
+
 	}
 
 	charts.init()

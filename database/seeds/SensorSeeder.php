@@ -31,13 +31,28 @@ class SensorSeeder extends Seeder
             [
                 'nome_sensor' => 'Gás',
                 'informacao'  => 30
-            ],  
+            ],
+            [
+                'nome_sensor' => 'Potência',
+                'informacao'  => 30
+            ],
+            [
+                'nome_sensor' => 'Fluxo',
+                'informacao'  => 30
+            ],
+            [
+                'nome_sensor' => 'Vazão',
+                'informacao'  => 30
+            ]
         ]);
 
         //01-Corrente 0 a 4
     	//02-Tensao 196 e 235
     	//03-Temperatura 45 a 70
     	//04-Umidade 45 e 65
-    	//05-Gás 0 a 100
+        //05-Gás 0 a 100
+        //06-potência
+        //07-vazão
+        //08-fluxo
     }
 }
