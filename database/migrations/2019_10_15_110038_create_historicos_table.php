@@ -20,9 +20,14 @@ class CreateHistoricosTable extends Migration
             $table->foreign('sensor_id')->references('id')->on('sensores');
 
             $table->double('dados');
-            // $table->date('data');
+            
             $table->datetime('data_hora');//hora
+
             $table->boolean('status');//true e false
+
+            $table->boolean('enviado');//se foi enviado alerta ou não
+
+            $table->timestamps(); //campo obrigatório para funcionamento do laravel
         });
     }
 

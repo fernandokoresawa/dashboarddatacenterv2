@@ -11,6 +11,7 @@ use App\Historico;
 use App\Shutdown;
 use App\Sensor;
 use App\Alerta;
+use App\User;
 
 class HomeController extends Controller
 {
@@ -59,48 +60,80 @@ class HomeController extends Controller
         $shutdown = Shutdown::find(1);
         $shut = $shutdown->rele;
 
+        $this->getAlerta();
+
         return view('home', compact('shut', 'getLastCorrente', 'getLastTensao', 'getLastTemp', 'getLastUmidade', 'getLastGas', 'getLastPot', 'getLastVazao', 'getLastFluxo'));
     }
 
     public function getAlerta()
     {
-        $lastTemp = Historico::where([['status', 1],['sensor_id', 3]])->orderby('data_hora','desc')->first();
+        $user = Auth()->user()->name;
 
-        $lastAlertTemp = new Alerta([
-            'historico_id' => $lastTemp->id,
-            'mensagem'     => 'Alerta! Falha identificada no sistema! Verifique os sensores.',
-            'enviado'      => true,
-        ]);
-        $lastAlertTemp->save();
+        /**
+         * ALERTA CORRENTE
+         */
+        $lastCorrente = Historico::where([['status', 1], ['sensor_id', 1], ['enviado', 0]])->orderby('data_hora', 'desc')->first();
 
-        //send('template do email', 'acesso a view do template', 'função com as configs do email' 
-        Mail::send('layouts.email.email', ['lastTemp'=>$lastTemp], function($m) use ($lastTemp) {
-            $m->from('yasminuchoa123@gmail.com', 'Datacenter Realtime');
-            $m->to('yasminuchoa123@gmail.com');
-            $m->subject('Alerta Datacenter - Sistema em estado crítico!');
-        });
+        if($lastCorrente) {
+            $newAlertaCorrente = new Alerta ([
+                'historico_id'  => $lastCorrente->id,
+                'mensagem'      => 'Alerta! Falha identificada no sistema! Verifique os sensores.',
+                'enviado'       => false,
+            ]);
+            $newAlertaCorrente->save();
 
-         $lastCorrente = Historico::where([['status', 1],['sensor_id', 1]])->orderby('data_hora','desc')->first();
+            $lastAlertaCorrente = Alerta::where([['historico_id', $lastCorrente->id], ['enviado', false]])->orderby('updated_at', 'desc')->first();
+    
+            if($lastAlertaCorrente) {
+                Mail::send('layouts.email.email', ['lastSensor' => $lastCorrente, 'user' => $user], function ($m) use ($lastCorrente) {
+                    $m->from('yasminuchoa123@gmail.com', 'Datacenter Realtime')
+                      ->to('yasminuchoa123@gmail.com')
+                      ->subject('Alerta Datacenter - Sistema em estado crítico!');
+                });
+    
+                $lastAlertaCorrente = Alerta::find($lastAlertaCorrente->id);
+                $lastAlertaCorrente->enviado = true;
+                $lastAlertaCorrente->save();
+    
+                $lastCorrente = Historico::find($lastCorrente->id);
+                $lastCorrente->enviado = true;
+                $lastCorrente->update();
+            }
+        }
 
-        $lastAlertCorrente = new Alerta([
-            'historico_id' => $lastCorrente->id,
-            'mensagem'     => 'Alerta! Falha identificada no sistema! Verifique os sensores.',
-            'enviado'      => true,
-        ]);
-        $lastAlertCorrente->save();
+        /**
+         * ALERTA TENSÃO
+         */
+        $lastTensao = Historico::where([['status', 1], ['sensor_id', 2], ['enviado', 0]])->orderby('data_hora', 'desc')->first();
 
-        //send('template do email', 'acesso a view do template', 'função com as configs do email' 
-        Mail::send('layouts.email.email', ['lastTemp'=>$lastCorrente], function($m) use ($lastCorrente) {
-            $m->from('yasminuchoa123@gmail.com', 'Datacenter Realtime');
-            $m->to('yasminuchoa123@gmail.com');
-            $m->subject('Alerta Datacenter - Sistema em estado crítico!');
-        });
+        if($lastTensao) {
+            $newAlertaTensao = new Alerta ([
+                'historico_id'  => $lastTensao->id,
+                'mensagem'      => 'Alerta! Falha identificada no sistema! Verifique os sensores.',
+                'enviado'       => false,
+            ]);
+            $newAlertaTensao->save();
 
-        
+            $lastAlertaTensao = Alerta::where([['historico_id', $lastTensao->id], ['enviado', false]])->orderby('updated_at', 'desc')->first();
+    
+            if($lastAlertaTensao) {
+                Mail::send('layouts.email.email', ['lastSensor' => $lastTensao, 'user' => $user], function ($m) use ($lastTensao) {
+                    $m->from('fgkm964shared@gmail.com', 'Datacenter Realtime')
+                      ->to('fgkm964shared@gmail.com')
+                      ->subject('Alerta Datacenter - Sistema em estado crítico!');
+                });
+    
+                $lastAlertaTensao = Alerta::find($lastAlertaTensao->id);
+                $lastAlertaTensao->enviado = true;
+                $lastAlertaTensao->save();
+    
+                $lastTensao = Historico::find($lastTensao->id);
+                $lastTensao->enviado = true;
+                $lastTensao->update();
+            }
+        }        
 
-        
         return redirect()->route('home');
-        
     }
 
 
