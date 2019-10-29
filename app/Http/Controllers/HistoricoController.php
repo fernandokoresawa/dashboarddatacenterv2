@@ -40,6 +40,10 @@ class HistoricoController extends Controller
         $temperatura = Sensor::find(3);
         $umidade = Sensor::find(4);
         $gas = Sensor::find(5);
+        $potencia = Sensor::find(6);
+        $vazao = Sensor::find(7);
+        $fluxo = Sensor::find(8);
+
 
         // SHUTDOWN
         $shutdown = $shutdown = Shutdown::find(1);
@@ -47,7 +51,7 @@ class HistoricoController extends Controller
 
         // dd($historicos);
 
-        return view('tabela', compact('shut', 'historicos', 'corrente', 'tensao', 'temperatura', 'umidade', 'gas'));
+        return view('tabela', compact('shut', 'historicos', 'corrente', 'tensao', 'temperatura', 'umidade', 'gas','potencia', 'vazao', 'fluxo'));
 
         //return view('tabela', compact('shut', 'getAllCorrente', 'getAllTensao', 'getAllTemp', 'getAllUmidade', 'getAllGas'));
     }

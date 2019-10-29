@@ -19,7 +19,7 @@ class HistoricoSeeder extends Seeder
             return number_format($number, 1, '.', '');
         }
 
-        for ($i = 1; $i <= 300; $i++) {
+        for ($i = 1; $i <= 100; $i++) {
 
             //01-Corrente 0 a 4
             DB::table('historicos')->insert([

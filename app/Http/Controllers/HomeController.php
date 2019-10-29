@@ -70,13 +70,8 @@ class HomeController extends Controller
             'historico_id' => $lastTemp->id,
             'mensagem'     => 'Alerta! Falha identificada no sistema! Verifique os sensores.',
             'enviado'      => true,
-            // 'created_at'   => Carbon::now(),
-            // 'updated_at'   => Carbon::now()
         ]);
         $lastAlertTemp->save();
-        // $historico_id = $lastTemp->id;
-
-
 
         //send('template do email', 'acesso a view do template', 'função com as configs do email' 
         Mail::send('layouts.email.email', ['lastTemp'=>$lastTemp], function($m) use ($lastTemp) {
@@ -85,10 +80,27 @@ class HomeController extends Controller
             $m->subject('Alerta Datacenter - Sistema em estado crítico!');
         });
 
-        // \Session::flash('mensagem', ['msg'=>'Mensagem enviada com sucesso! Em breve retornaremos o contato!', 'class'=>'green white-text']);
+         $lastCorrente = Historico::where([['status', 1],['sensor_id', 1]])->orderby('data_hora','desc')->first();
 
-        return redirect()->back('index', '#contato');
-        // return 'ok';
+        $lastAlertCorrente = new Alerta([
+            'historico_id' => $lastCorrente->id,
+            'mensagem'     => 'Alerta! Falha identificada no sistema! Verifique os sensores.',
+            'enviado'      => true,
+        ]);
+        $lastAlertCorrente->save();
+
+        //send('template do email', 'acesso a view do template', 'função com as configs do email' 
+        Mail::send('layouts.email.email', ['lastTemp'=>$lastCorrente], function($m) use ($lastCorrente) {
+            $m->from('yasminuchoa123@gmail.com', 'Datacenter Realtime');
+            $m->to('yasminuchoa123@gmail.com');
+            $m->subject('Alerta Datacenter - Sistema em estado crítico!');
+        });
+
+        
+
+        
+        return redirect()->route('home');
+        
     }
 
 

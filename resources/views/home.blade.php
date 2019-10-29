@@ -10,14 +10,14 @@
                     <div class="row">
                         <div class="col">
                             <h5 class="card-title text-uppercase text-muted mb-0">Corrente</h5>
-                            <span class="h2 font-weight-bold mb-0">{{ $getLastCorrente->dados }}</span>
+                            <span class="h2 font-weight-bold mb-0">{{ $getLastCorrente->dados }}A</span>
                         </div>
                         <div class="col-auto">
 
                         </div>
                     </div>
                     <p class="mt-3 mb-0 text-muted text-sm">
-                        <span class="text-nowrap">Padrão: 0 a 4 amperes.</span>
+                        <span class="text-nowrap">Padrão: 0 a 2 amperes.</span>
                     </p>
                 </div>
             </div>
@@ -28,14 +28,14 @@
                     <div class="row">
                         <div class="col">
                             <h5 class="card-title text-uppercase text-muted mb-0">Temperatura</h5>
-                            <span class="h2 font-weight-bold mb-0">{{ $getLastTemp->dados }}</span>
+                            <span class="h2 font-weight-bold mb-0">{{ $getLastTemp->dados }}ºC</span>
                         </div>
                         <div class="col-auto">
 
                         </div>
                     </div>
                     <p class="mt-3 mb-0 text-muted text-sm">
-                        <span class="text-nowrap">Padrão: 0 a 4 amperes.</span>
+                        <span class="text-nowrap">Padrão: 0 a 72 graus.</span>
                     </p>
                 </div>
             </div>
@@ -46,14 +46,14 @@
                     <div class="row">
                         <div class="col">
                             <h5 class="card-title text-uppercase text-muted mb-0">Tensão</h5>
-                            <span class="h2 font-weight-bold mb-0">{{ $getLastTensao->dados }}</span>
+                            <span class="h2 font-weight-bold mb-0">{{ $getLastTensao->dados }}Vac</span>
                         </div>
                         <div class="col-auto">
 
                         </div>
                     </div>
                     <p class="mt-3 mb-0 text-muted text-sm">
-                        <span class="text-nowrap">Padrão: 196 e 235 volts.</span>
+                        <span class="text-nowrap">Padrão: 200 e 240Vac.</span>
                     </p>
                 </div>
             </div>
@@ -64,14 +64,14 @@
                     <div class="row">
                         <div class="col">
                             <h5 class="card-title text-uppercase text-muted mb-0">Gás</h5>
-                            <span class="h2 font-weight-bold mb-0">{{ $getLastGas->dados }}</span>
+                            <span class="h2 font-weight-bold mb-0">{{ $getLastGas->dados }}ppm</span>
                         </div>
                         <div class="col-auto">
 
                         </div>
                     </div>
                     <p class="mt-3 mb-0 text-muted text-sm">
-                        <span class="text-nowrap">Padrão:0 a 250 ppm</span>
+                        <span class="text-nowrap">Padrão:0 a 80 ppm</span>
                     </p>
                 </div>
             </div>
@@ -89,7 +89,7 @@
                         </div>
                     </div>
                     <p class="mt-3 mb-0 text-muted text-sm">
-                        <span class="text-nowrap">Padrão: 45% a 65%</span>
+                        <span class="text-nowrap">Padrão: 0 a 40%</span>
                     </p>
                 </div>
             </div>
@@ -100,14 +100,14 @@
                     <div class="row">
                         <div class="col">
                             <h5 class="card-title text-uppercase text-muted mb-0">Potência</h5>
-                            <span class="h2 font-weight-bold mb-0">{{ $getLastPot->dados }}</span>
+                            <span class="h2 font-weight-bold mb-0">{{ $getLastPot->dados }}w</span>
                         </div>
                         <div class="col-auto">
 
                         </div>
                     </div>
                     <p class="mt-3 mb-0 text-muted text-sm">
-                        <span class="text-nowrap">Padrão: 196 e 235 volts.</span>
+                        <span class="text-nowrap">Padrão: 0 a 440w.</span>
                     </p>
                 </div>
             </div>
@@ -118,14 +118,14 @@
                     <div class="row">
                         <div class="col">
                             <h5 class="card-title text-uppercase text-muted mb-0">Vazão</h5>
-                            <span class="h2 font-weight-bold mb-0">{{ $getLastVazao->dados }}</span>
+                            <span class="h2 font-weight-bold mb-0">{{ $getLastVazao->dados }}L/s</span>
                         </div>
                         <div class="col-auto">
 
                         </div>
                     </div>
                     <p class="mt-3 mb-0 text-muted text-sm">
-                        <span class="text-nowrap">Padrão: 196 e 235 volts.</span>
+                        <span class="text-nowrap">Padrão: 63 a 91 L/s.</span>
                     </p>
                 </div>
             </div>
@@ -136,14 +136,14 @@
                     <div class="row">
                         <div class="col">
                             <h5 class="card-title text-uppercase text-muted mb-0">Fluxo</h5>
-                            <span class="h2 font-weight-bold mb-0">{{ $getLastFluxo->dados }}</span>
+                            <span class="h2 font-weight-bold mb-0">{{ $getLastFluxo->dados }}%</span>
                         </div>
                         <div class="col-auto">
 
                         </div>
                     </div>
                     <p class="mt-3 mb-0 text-muted text-sm">
-                        <span class="text-nowrap">Padrão: 196 e 235 volts.</span>
+                        <span class="text-nowrap">Padrão: 0 a 40%.</span>
                     </p>
                 </div>
             </div>
