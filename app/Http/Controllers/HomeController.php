@@ -33,28 +33,28 @@ class HomeController extends Controller
     public function index()
     {
         // PEGAR ÚLTIMO RESGITRO DO SENSOR DE CORRENTE - 1
-        $getLastCorrente = Historico::where('sensor_id', '=', 1)->orderby('id', 'desc')->first();
+        $getLastCorrente = Historico::where('sensor_id', '=', 1)->orderby('data_hora', 'desc')->first();
 
         // PEGAR ÚLTIMO RESGITRO DO SENSOR DE TENSÃO - 2
-        $getLastTensao = Historico::where('sensor_id', '=', 2)->orderby('id', 'desc')->first();
+        $getLastTensao = Historico::where('sensor_id', '=', 2)->orderby('data_hora', 'desc')->first();
 
         // PEGAR ÚLTIMO RESGITRO DO SENSOR DE TEMP - 3
-        $getLastTemp = Historico::where('sensor_id', '=', 3)->orderby('id', 'desc')->first();
+        $getLastTemp = Historico::where('sensor_id', '=', 3)->orderby('data_hora', 'desc')->first();
 
         // PEGAR ÚLTIMO RESGITRO DO SENSOR DE UMIDADE - 4
-        $getLastUmidade = Historico::where('sensor_id', '=', 4)->orderby('id', 'desc')->first();
+        $getLastUmidade = Historico::where('sensor_id', '=', 4)->orderby('data_hora', 'desc')->first();
 
         // PEGAR ÚLTIMO RESGITRO DO SENSOR DE GÁS - 5
-        $getLastGas = Historico::where('sensor_id', '=', 5)->orderby('id', 'desc')->first();
+        $getLastGas = Historico::where('sensor_id', '=', 5)->orderby('data_hora', 'desc')->first();
 
         // PEGAR ÚLTIMO RESGITRO DO SENSOR DE POTÊNCIA - 6
-        $getLastPot = Historico::where('sensor_id', '=', 6)->orderby('id', 'desc')->first();
+        $getLastPot = Historico::where('sensor_id', '=', 6)->orderby('data_hora', 'desc')->first();
 
         // PEGAR ÚLTIMO RESGITRO DO SENSOR DE VAZÃO - 7
-        $getLastVazao = Historico::where('sensor_id', '=', 7)->orderby('id', 'desc')->first();
+        $getLastVazao = Historico::where('sensor_id', '=', 7)->orderby('data_hora', 'desc')->first();
 
         // PEGAR ÚLTIMO RESGITRO DO SENSOR DE FLUXO - 8
-        $getLastFluxo = Historico::where('sensor_id', '=', 8)->orderby('id', 'desc')->first();
+        $getLastFluxo = Historico::where('sensor_id', '=', 8)->orderby('data_hora', 'desc')->first();
 
         // SHUTDOWN
         $shutdown = Shutdown::find(1);
@@ -85,7 +85,7 @@ class HomeController extends Controller
             $lastAlertaCorrente = Alerta::where([['historico_id', $lastCorrente->id], ['enviado', false]])->orderby('updated_at', 'desc')->first();
     
             if($lastAlertaCorrente) {
-                Mail::send('layouts.email.email', ['lastSensor' => $lastCorrente, 'user' => $user], function ($m) use ($lastCorrente) {
+                Mail::send('layouts.email.email', ['lastSensor' => $lastCorrente, 'user' => $user], function ($m) {
                     $m->from('yasminuchoa123@gmail.com', 'Datacenter Realtime')
                       ->to('yasminuchoa123@gmail.com')
                       ->subject('Alerta Datacenter - Sistema em estado crítico!');
@@ -100,6 +100,7 @@ class HomeController extends Controller
                 $lastCorrente->update();
             }
         }
+
 
         /**
          * ALERTA TENSÃO
@@ -117,9 +118,9 @@ class HomeController extends Controller
             $lastAlertaTensao = Alerta::where([['historico_id', $lastTensao->id], ['enviado', false]])->orderby('updated_at', 'desc')->first();
     
             if($lastAlertaTensao) {
-                Mail::send('layouts.email.email', ['lastSensor' => $lastTensao, 'user' => $user], function ($m) use ($lastTensao) {
-                    $m->from('fgkm964shared@gmail.com', 'Datacenter Realtime')
-                      ->to('fgkm964shared@gmail.com')
+                Mail::send('layouts.email.email', ['lastSensor' => $lastTensao, 'user' => $user], function ($m) {
+                    $m->from('yasminuchoa123@gmail.com', 'Datacenter Realtime')
+                      ->to('yasminuchoa123@gmail.com')
                       ->subject('Alerta Datacenter - Sistema em estado crítico!');
                 });
     
@@ -131,7 +132,205 @@ class HomeController extends Controller
                 $lastTensao->enviado = true;
                 $lastTensao->update();
             }
-        }        
+        } 
+        
+        
+        /**
+         * ALERTA TEMPERATURA
+         */
+        $lastTemperatura = Historico::where([['status', 1], ['sensor_id', 3], ['enviado', 0]])->orderby('data_hora', 'desc')->first();
+
+        if($lastTemperatura) {
+            $newAlertTemperatura = new Alerta ([
+                'historico_id'  => $lastTemperatura->id,
+                'mensagem'      => 'Alerta! Falha identificada no sistema! Verifique os sensores.',
+                'enviado'       => false,
+            ]);
+            $newAlertTemperatura->save();
+
+            $lastAlertTemperatura = Alerta::where([['historico_id', $lastTemperatura->id], ['enviado', false]])->orderby('updated_at', 'desc')->first();
+    
+            if($lastAlertTemperatura) {
+                Mail::send('layouts.email.email', ['lastSensor' => $lastTemperatura, 'user' => $user], function ($m) {
+                    $m->from('yasminuchoa123@gmail.com', 'Datacenter Realtime')
+                      ->to('yasminuchoa123@gmail.com')
+                      ->subject('Alerta Datacenter - Sistema em estado crítico!');
+                });
+    
+                $lastAlertTemperatura = Alerta::find($lastAlertTemperatura->id);
+                $lastAlertTemperatura->enviado = true;
+                $lastAlertTemperatura->save();
+    
+                $lastTemperatura = Historico::find($lastTemperatura->id);
+                $lastTemperatura->enviado = true;
+                $lastTemperatura->update();
+            }
+        } 
+
+
+        /**
+         * ALERTA UMIDADE
+         */
+        $lastUmidade = Historico::where([['status', 1], ['sensor_id', 4], ['enviado', 0]])->orderby('data_hora', 'desc')->first();
+
+        if($lastUmidade) {
+            $newAlertUmidade = new Alerta ([
+                'historico_id'  => $lastUmidade->id,
+                'mensagem'      => 'Alerta! Falha identificada no sistema! Verifique os sensores.',
+                'enviado'       => false,
+            ]);
+            $newAlertUmidade->save();
+
+            $lastAlertUmidade = Alerta::where([['historico_id', $lastUmidade->id], ['enviado', false]])->orderby('updated_at', 'desc')->first();
+    
+            if($lastAlertUmidade) {
+                Mail::send('layouts.email.email', ['lastSensor' => $lastUmidade, 'user' => $user], function ($m) {
+                    $m->from('yasminuchoa123@gmail.com', 'Datacenter Realtime')
+                      ->to('yasminuchoa123@gmail.com')
+                      ->subject('Alerta Datacenter - Sistema em estado crítico!');
+                });
+    
+                $lastAlertUmidade = Alerta::find($lastAlertUmidade->id);
+                $lastAlertUmidade->enviado = true;
+                $lastAlertUmidade->save();
+    
+                $lastUmidade = Historico::find($lastUmidade->id);
+                $lastUmidade->enviado = true;
+                $lastUmidade->update();
+            }
+        } 
+
+
+        /**
+         * ALERTA GÁS
+         */
+        $lastGas = Historico::where([['status', 1], ['sensor_id', 5], ['enviado', 0]])->orderby('data_hora', 'desc')->first();
+
+        if($lastGas) {
+            $newAlertGas = new Alerta ([
+                'historico_id'  => $lastGas->id,
+                'mensagem'      => 'Alerta! Falha identificada no sistema! Verifique os sensores.',
+                'enviado'       => false,
+            ]);
+            $newAlertGas->save();
+
+            $lastAlertGas = Alerta::where([['historico_id', $lastGas->id], ['enviado', false]])->orderby('updated_at', 'desc')->first();
+    
+            if($lastAlertGas) {
+                Mail::send('layouts.email.email', ['lastSensor' => $lastGas, 'user' => $user], function ($m) {
+                    $m->from('yasminuchoa123@gmail.com', 'Datacenter Realtime')
+                      ->to('yasminuchoa123@gmail.com')
+                      ->subject('Alerta Datacenter - Sistema em estado crítico!');
+                });
+    
+                $lastAlertGas = Alerta::find($lastAlertGas->id);
+                $lastAlertGas->enviado = true;
+                $lastAlertGas->save();
+    
+                $lastGas = Historico::find($lastGas->id);
+                $lastGas->enviado = true;
+                $lastGas->update();
+            }
+        }
+        
+        
+        /**
+         * ALERTA POTÊNCIA
+         */
+        $lastPotencia = Historico::where([['status', 1], ['sensor_id', 6], ['enviado', 0]])->orderby('data_hora', 'desc')->first();
+
+        if($lastPotencia) {
+            $newAlertPotencia = new Alerta ([
+                'historico_id'  => $lastPotencia->id,
+                'mensagem'      => 'Alerta! Falha identificada no sistema! Verifique os sensores.',
+                'enviado'       => false,
+            ]);
+            $newAlertPotencia->save();
+
+            $lastAlertPotencia = Alerta::where([['historico_id', $lastPotencia->id], ['enviado', false]])->orderby('updated_at', 'desc')->first();
+    
+            if($lastAlertPotencia) {
+                Mail::send('layouts.email.email', ['lastSensor' => $lastPotencia, 'user' => $user], function ($m) {
+                    $m->from('yasminuchoa123@gmail.com', 'Datacenter Realtime')
+                      ->to('yasminuchoa123@gmail.com')
+                      ->subject('Alerta Datacenter - Sistema em estado crítico!');
+                });
+    
+                $lastAlertPotencia = Alerta::find($lastAlertPotencia->id);
+                $lastAlertPotencia->enviado = true;
+                $lastAlertPotencia->save();
+    
+                $lastPotencia = Historico::find($lastPotencia->id);
+                $lastPotencia->enviado = true;
+                $lastPotencia->update();
+            }
+        } 
+
+
+        /**
+         * ALERTA VAZÃO
+         */
+        $lastVazao = Historico::where([['status', 1], ['sensor_id', 7], ['enviado', 0]])->orderby('data_hora', 'desc')->first();
+
+        if($lastVazao) {
+            $newAlertVazao = new Alerta ([
+                'historico_id'  => $lastVazao->id,
+                'mensagem'      => 'Alerta! Falha identificada no sistema! Verifique os sensores.',
+                'enviado'       => false,
+            ]);
+            $newAlertVazao->save();
+
+            $lastAlertVazao = Alerta::where([['historico_id', $lastVazao->id], ['enviado', false]])->orderby('updated_at', 'desc')->first();
+    
+            if($lastAlertVazao) {
+                Mail::send('layouts.email.email', ['lastSensor' => $lastVazao, 'user' => $user], function ($m) {
+                    $m->from('yasminuchoa123@gmail.com', 'Datacenter Realtime')
+                      ->to('yasminuchoa123@gmail.com')
+                      ->subject('Alerta Datacenter - Sistema em estado crítico!');
+                });
+    
+                $lastAlertVazao = Alerta::find($lastAlertVazao->id);
+                $lastAlertVazao->enviado = true;
+                $lastAlertVazao->save();
+    
+                $lastVazao = Historico::find($lastVazao->id);
+                $lastVazao->enviado = true;
+                $lastVazao->update();
+            }
+        } 
+
+
+        /**
+         * ALERTA FLUXO
+         */
+        $lastFluxo = Historico::where([['status', 1], ['sensor_id', 8], ['enviado', 0]])->orderby('data_hora', 'desc')->first();
+
+        if($lastFluxo) {
+            $newAlertFluxo = new Alerta ([
+                'historico_id'  => $lastFluxo->id,
+                'mensagem'      => 'Alerta! Falha identificada no sistema! Verifique os sensores.',
+                'enviado'       => false,
+            ]);
+            $newAlertFluxo->save();
+
+            $lastAlertFluxo = Alerta::where([['historico_id', $lastFluxo->id], ['enviado', false]])->orderby('updated_at', 'desc')->first();
+    
+            if($lastAlertFluxo) {
+                Mail::send('layouts.email.email', ['lastSensor' => $lastFluxo, 'user' => $user], function ($m) {
+                    $m->from('yasminuchoa123@gmail.com', 'Datacenter Realtime')
+                      ->to('yasminuchoa123@gmail.com')
+                      ->subject('Alerta Datacenter - Sistema em estado crítico!');
+                });
+    
+                $lastAlertFluxo = Alerta::find($lastAlertFluxo->id);
+                $lastAlertFluxo->enviado = true;
+                $lastAlertFluxo->save();
+    
+                $lastFluxo = Historico::find($lastFluxo->id);
+                $lastFluxo->enviado = true;
+                $lastFluxo->update();
+            }
+        } 
 
         return redirect()->route('home');
     }

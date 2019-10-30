@@ -25,7 +25,7 @@ class HistoricoSeeder extends Seeder
             DB::table('historicos')->insert([
                 'sensor_id'     => 1,
                 'dados'         => randomFloat(0, 2),
-                'data_hora'          => '2019-' . Rand(3, 10) . '-' . Rand(1, 30) . ' ' . Rand(0, 23) . ':' . Rand(10, 59) . ':' . Rand(10, 59),
+                'data_hora'     => '2019-' . Rand(3, 10) . '-' . Rand(1, 30) . ' ' . Rand(0, 23) . ':' . Rand(10, 59) . ':' . Rand(10, 59),
                 'status'        => 0,
                 'enviado'       => true
             ]);
@@ -33,7 +33,7 @@ class HistoricoSeeder extends Seeder
             DB::table('historicos')->insert([
                 'sensor_id'     => 1,
                 'dados'         => randomFloat((float)2.1, 5),
-                'data_hora'          => '2019-' . Rand(3, 10) . '-' . Rand(1, 30) . ' ' . Rand(0, 23) . ':' . Rand(10, 59) . ':' . Rand(10, 59),
+                'data_hora'     => '2019-' . Rand(3, 10) . '-' . Rand(1, 30) . ' ' . Rand(0, 23) . ':' . Rand(10, 59) . ':' . Rand(10, 59),
                 'status'        => 1,
                 'enviado'       => true
             ]);

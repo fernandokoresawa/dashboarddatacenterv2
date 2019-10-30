@@ -68,11 +68,11 @@
                     </li>
 
                     <li class="nav-link">
-                            <a href="{{ route('alerta') }}">
-                                <i class="now-ui-icons location_map-big"></i>
-                                <p>Alertas</p>
-                            </a>
-                        </li>
+                        <a href="{{ route('alerta') }}">
+                            <i class="now-ui-icons location_map-big"></i>
+                            <p>Alertas</p>
+                        </a>
+                    </li>
 
                     <li class="nav-link dropdown">
                         <a class="nav-link dropdown-toggle" id="navbarDropdownMenuLink" data-toggle="dropdown"
@@ -126,12 +126,8 @@
     {{-- <script src="{{ asset('js/app.js') }}"></script> --}}
 
     <script>
-        $('.dropdown-toggle').dropdown()
+        $(".dropdown-toggle").dropdown(),$(".nav .nav-link").on("click",function(){$(".nav").find(".active").removeClass("active"),$(this).addClass("active")});setTimeout(function(){location.reload();},20000);//1000 = 1seg
 
-    $(".nav .nav-link").on("click", function(){
-        $(".nav").find(".active").removeClass("active")
-        $(this).addClass("active")
-    })
     </script>
 
 </body>

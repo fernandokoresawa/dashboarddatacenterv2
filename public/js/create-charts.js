@@ -99,7 +99,7 @@
 		ajaxGetDadosGas: function () {
 			var urlPath = 'http://' + window.location.hostname + ':8000' + '/chartmain'
 			var request = $.ajax({
-				method: 'GET',$
+				method: 'GET',
 				url: urlPath
 			})
 

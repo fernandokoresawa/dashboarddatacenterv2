@@ -32,3 +32,5 @@ Route::put('shutdown', 'ShutdownController@shutdown')->name('shutdown');
 Route::get('tabela', 'HistoricoController@index')->name('tabela');
 
 Route::get('alerta', 'AlertaController@index')->name('alerta');
+
+Route::get('filtro', 'HistoricoController@filtro')->name('filtro');

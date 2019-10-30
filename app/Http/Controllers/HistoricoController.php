@@ -18,32 +18,23 @@ class HistoricoController extends Controller
      */
     public function index()
     {
-        // // PEGAR TODOS OS REGISTROS DO SENSOR DE CORRENTE - 1
-        // $getAllCorrente = Historico::where('sensor_id', '=', 1)->get();
+        $historicoCorrente      = DB::table('historicos')->where('sensor_id', 1)->orderBy('data_hora', 'desc')->get();
+        $historicoTensao        = DB::table('historicos')->where('sensor_id', 2)->orderBy('data_hora', 'desc')->get();
+        $historicoTemperatura   = DB::table('historicos')->where('sensor_id', 3)->orderBy('data_hora', 'desc')->get();
+        $historicoUmidade       = DB::table('historicos')->where('sensor_id', 4)->orderBy('data_hora', 'desc')->get();
+        $historicoGas           = DB::table('historicos')->where('sensor_id', 5)->orderBy('data_hora', 'desc')->get();
+        $historicoPotencia      = DB::table('historicos')->where('sensor_id', 6)->orderBy('data_hora', 'desc')->get();
+        $historicoVazao         = DB::table('historicos')->where('sensor_id', 7)->orderBy('data_hora', 'desc')->get();
+        $historicoFluxo         = DB::table('historicos')->where('sensor_id', 8)->orderBy('data_hora', 'desc')->get();
 
-        // // PEGAR TODOS OS REGISTROS DO SENSOR DE TENSÃO - 2
-        // $getAllTensao = Historico::where('sensor_id', '=', 2)->get();
-
-        // // PEGAR TODOS OS REGISTROS DO SENSOR DE TEMP - 3
-        // $getAllTemp = Historico::where('sensor_id', '=', 3)->get();
-
-        // // PEGAR TODOS OS REGISTROS DO SENSOR DE UMIDADE - 4
-        // $getAllUmidade = Historico::where('sensor_id', '=', 4)->get();
-
-        // // PEGAR TODOS OS REGISTROS DO SENSOR DE GÁS - 5
-        // $getAllGas = Historico::where('sensor_id', '=', 5)->get();
-
-        $historicos = DB::table('historicos')->orderBy('data_hora', 'desc')->get();
-        
-        $corrente = Sensor::find(1);
-        $tensao = Sensor::find(2);
-        $temperatura = Sensor::find(3);
-        $umidade = Sensor::find(4);
-        $gas = Sensor::find(5);
-        $potencia = Sensor::find(6);
-        $vazao = Sensor::find(7);
-        $fluxo = Sensor::find(8);
-
+        $corrente       = Sensor::find(1);
+        $tensao         = Sensor::find(2);
+        $temperatura    = Sensor::find(3);
+        $umidade        = Sensor::find(4);
+        $gas            = Sensor::find(5);
+        $potencia       = Sensor::find(6);
+        $vazao          = Sensor::find(7);
+        $fluxo          = Sensor::find(8);
 
         // SHUTDOWN
         $shutdown = $shutdown = Shutdown::find(1);
@@ -51,108 +42,91 @@ class HistoricoController extends Controller
 
         // dd($historicos);
 
-        return view('tabela', compact('shut', 'historicos', 'corrente', 'tensao', 'temperatura', 'umidade', 'gas','potencia', 'vazao', 'fluxo'));
-
-        //return view('tabela', compact('shut', 'getAllCorrente', 'getAllTensao', 'getAllTemp', 'getAllUmidade', 'getAllGas'));
+        return view(
+            'tabela',
+            compact(
+                'shut',
+                'historicoCorrente',
+                'historicoTensao',
+                'historicoTemperatura',
+                'historicoUmidade',
+                'historicoGas',
+                'historicoPotencia',
+                'historicoVazao',
+                'historicoFluxo',
+                'corrente',
+                'tensao',
+                'temperatura',
+                'umidade',
+                'gas',
+                'potencia',
+                'vazao',
+                'fluxo'
+            )
+        );
     }
 
-    public function busca(Request $request) {
-        $busca = $request->all();
+    public function filtro(Request $request)
+    {
+        // SHUTDOWN
+        $shutdown = $shutdown = Shutdown::find(1);
+        $shut = $shutdown->rele;
 
-        $slides = Slide::where('publicado', 'sim')->orderBy('ordem')->get();
+        // FILTRO
+        $filtro = $request['data'];
 
-        $tipos = Tipo::orderBy('titulo')->get();
+        // dd($filtro);
 
-        $cidades = Cidade::orderBy('nome')->get();
+        $mensagemSemFiltro = 'Não houve ocorrência nesta data';
 
-        $paginacao = false;
+        if ($filtro) {
+            $historicoCorrente      = DB::table('historicos')->where([['sensor_id', 1],['data_hora', 'like', '%'.$filtro.' %']])->orderBy('data_hora', 'desc')->get();
+            $historicoTensao        = DB::table('historicos')->where([['sensor_id', 2],['data_hora', 'like', '%'.$filtro.' %']])->orderBy('data_hora', 'desc')->get();
+            $historicoTemperatura   = DB::table('historicos')->where([['sensor_id', 3],['data_hora', 'like', '%'.$filtro.' %']])->orderBy('data_hora', 'desc')->get();
+            $historicoUmidade       = DB::table('historicos')->where([['sensor_id', 4],['data_hora', 'like', '%'.$filtro.' %']])->orderBy('data_hora', 'desc')->get();
+            $historicoGas           = DB::table('historicos')->where([['sensor_id', 5],['data_hora', 'like', '%'.$filtro.' %']])->orderBy('data_hora', 'desc')->get();
+            $historicoPotencia      = DB::table('historicos')->where([['sensor_id', 6],['data_hora', 'like', '%'.$filtro.' %']])->orderBy('data_hora', 'desc')->get();
+            $historicoVazao         = DB::table('historicos')->where([['sensor_id', 7],['data_hora', 'like', '%'.$filtro.' %']])->orderBy('data_hora', 'desc')->get();
+            $historicoFluxo         = DB::table('historicos')->where([['sensor_id', 8],['data_hora', 'like', '%'.$filtro.' %']])->orderBy('data_hora', 'desc')->get();
 
+            $corrente       = Sensor::find(1);
+            $tensao         = Sensor::find(2);
+            $temperatura    = Sensor::find(3);
+            $umidade        = Sensor::find(4);
+            $gas            = Sensor::find(5);
+            $potencia       = Sensor::find(6);
+            $vazao          = Sensor::find(7);
+            $fluxo          = Sensor::find(8);
 
-        //IMPLEMENTAÇÃO DA BUSCA/FILTRO
-        if($busca['status'] == 'todos') {
-            $statusFiltro = [
-                ['status', '<>', null]
-            ];
-        } else {
-            $statusFiltro = [
-                ['status', $busca['status']]
-            ];
+            // SHUTDOWN
+            $shutdown = $shutdown = Shutdown::find(1);
+            $shut = $shutdown->rele;
+
+            // dd($historicos);
+
+            return view(
+                'tabela',
+                compact(
+                    'shut',
+                    'historicoCorrente',
+                    'historicoTensao',
+                    'historicoTemperatura',
+                    'historicoUmidade',
+                    'historicoGas',
+                    'historicoPotencia',
+                    'historicoVazao',
+                    'historicoFluxo',
+                    'corrente',
+                    'tensao',
+                    'temperatura',
+                    'umidade',
+                    'gas',
+                    'potencia',
+                    'vazao',
+                    'fluxo'
+                )
+            );
         }
-
-        if($busca['tipo_id'] == 'todos') {
-            $tipoFiltro = [
-                ['tipo_id', '<>', null]
-            ];
-        } else {
-            $tipoFiltro = [
-                ['tipo_id', $busca['tipo_id']]
-            ];
-        }
-
-        if($busca['cidade_id'] == 'todos') {
-            $cidadeFiltro = [
-                ['cidade_id', '<>', null]
-            ];
-        } else {
-            $cidadeFiltro = [
-                ['cidade_id', $busca['cidade_id']]
-            ];
-        }
-
-        $dormitoriosFiltro = [
-            ['dormitorios', '>=', 0],
-            ['dormitorios', '=', 1],
-            ['dormitorios', '=', 2],
-            ['dormitorios', '=', 3],
-            ['dormitorios', '=', 4],
-            ['dormitorios', '=', 5],
-            ['dormitorios', '=', 6],
-            ['dormitorios', '=', 7],
-            ['dormitorios', '=', 8],
-            ['dormitorios', '=', 9],
-            ['dormitorios', '=', 10]
-        ];
-        $numDormitorios = $busca['dormitorios'];
-
-        $valorFiltro = [
-            ['valor', '>=', '0'],
-            ['valor', '<=', '500'],
-            [['valor', '>=', '500'], ['valor', '<=', '1000']],
-            [['valor', '>=', '1000'], ['valor', '<=', '5000']],
-            [['valor', '>=', '5000'], ['valor', '<=', '10000']],
-            [['valor', '>=', '10000'], ['valor', '<=', '50000']],
-            [['valor', '>=', '50000'], ['valor', '<=', '100000']],
-            [['valor', '>=', '100000'], ['valor', '<=', '200000']],
-            [['valor', '>=', '200000'], ['valor', '<=', '300000']],
-            [['valor', '>=', '300000'], ['valor', '<=', '500000']],
-            [['valor', '>=', '500000'], ['valor', '<=', '1000000']],
-            ['valor', '>=', '1000000']
-        ];
-        $valor = $busca['valor'];
-
-        // if($busca['bairro'] != '') {
-        //     $bairroFiltro = [
-        //         ['endereco', 'like', '%' . $busca['bairro'] . '%']
-        //     ];
-        // } else {
-        //     $bairroFiltro = [
-        //         ['endereco', '<>', null]
-        //     ];
-        // }
-
-
-        $imoveis = Imovel::where('publicar', 'sim')
-        ->where($statusFiltro)
-        ->where($tipoFiltro)
-        ->where($cidadeFiltro)
-        ->where([$dormitoriosFiltro[$numDormitorios]])
-        ->where([$valorFiltro[$valor]])
-        // ->where($bairroFiltro)
-        ->orderBy('id', 'desc')->get();
-
-        echo $imoveis;exit;
-
-        return view('site.busca', compact('busca', 'imoveis', 'paginacao', 'slides', 'tipos', 'cidades'));
     }
 
     /**
